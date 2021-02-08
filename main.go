@@ -14,12 +14,12 @@ func main() {
 	//创建app
 	app := wails.CreateApp(&wails.AppConfig{
 		Width:     720,
-		Height:    420,
+		Height:    290,
 		Title:     "One Encoder",
 		JS:        js,
 		CSS:       css,
 		Colour:    "#eaeaea",
-		Resizable: true,
+		Resizable: false,
 	})
 
 	//绑定后端&运行
