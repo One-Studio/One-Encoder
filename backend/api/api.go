@@ -1,6 +1,6 @@
 package api
 
-type OsMirror struct {
+type ReleaseDelivr struct {
 	Version      string   `json:"Version"`
 	VersionList  []string `json:"VersionList"`
 	ReleaseTime  string   `json:"ReleaseTime"`
@@ -9,3 +9,4 @@ type OsMirror struct {
 	Format       int      `json:"Format"`
 	ReleaseNote  string   `json:"ReleaseNote"`
 }
+

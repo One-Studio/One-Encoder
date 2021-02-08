@@ -2,8 +2,10 @@ package backend
 
 import (
 	"One-Encoder/backend/config"
+	"One-Encoder/backend/tool"
 	"fmt"
 	"github.com/wailsapp/wails"
+	"log"
 )
 
 ///// app.go 存放backend包与frontend交互的大部分操作
@@ -19,8 +21,12 @@ type App struct {
 func (a *App) WailsInit(runtime *wails.Runtime) error {
 	a.runtime = runtime
 	//初始化后：
-	fmt.Println("Wails初始化")
-	config.ReadConfig(a.cfg)
+	var err error
+	if a.cfg, err = config.ReadConfig("./config.json"); err != nil {
+		a.runtime.Events.Emit("SetLog", err)
+		log.Println(err)
+		return err
+	}
 
 	return nil
 }
@@ -29,9 +35,17 @@ func (a *App) WailsInit(runtime *wails.Runtime) error {
 func (a *App) WailsShutdown() {
 	//结束前：
 	fmt.Println("Wails结束")
-	config.SaveConfig(a.cfg)
-
+	err := config.SaveConfig(a.cfg, "./config.json")
+	if err != nil {
+		log.Println(err)
+	}
 	return
+}
+
+//设置前端变量
+func (a *App) SetVar() {
+	//a.setAppVersion(a.cfg.AppVersion)
+	//a.setVersionCode(a.cfg.VersionCode)
 }
 
 func (a *App) SelectSrcPath() (string, error) {
@@ -49,12 +63,19 @@ func (a *App) ParseDragFiles() (string, error) {
 	return "", nil
 }
 
-func (a *App) StartEncoding() (string, error) {
-
+func (a *App) StartEncoding(tool string) (string, error) {
+	command := "1"
+	if output, err := tool.Cmd(command); err != nil {
+		fmt.Println(output)
+	}
 	return "", nil
 }
 
 func (a *App) PauseEncoding() (string, error) {
+
+	return "", nil
+}
+func (a *App) QuitEncoding() (string, error) {
 
 	return "", nil
 }
@@ -73,26 +94,3 @@ func (a *App) OpenProgramDir() (string, error) {
 
 	return "", nil
 }
-
-
-
-//具体的方法返回只能是 x 或者 (x, error) 下面是cantor中使用映射json的方式处理返回值
-//// GetConfig 获取 git 配置和版本信息
-//func (a *App) GetConfig() *configs.Resp {
-//	resp := map[string]interface{}{
-//		"config": a.Git,
-//		"version": map[string]interface{}{
-//			"current": configs.Version,
-//			"last":    a.Git.LastVersion(),
-//		},
-//	}
-//	a.Log.Info("GetConfig content: ", crypto.JsonEncode(resp))
-//	return tools.Success(resp)
-//}
-//
-//// config包：Resp ...
-//type Resp struct {
-//	Code int         `json:"code"`
-//	Msg  string      `json:"msg"`
-//	Data interface{} `json:"data"`
-//}
