@@ -1,0 +1,25 @@
+{
+ "name": "One-Encoder",
+ "description": "Enter your project description",
+ "author": {
+  "name": "Purp1e",
+  "email": "438518244@qq.com"
+ },
+ "version": "0.1.0",
+ "binaryname": "One-Encoder",
+ "frontend": {
+  "dir": "frontend",
+  "install": "yarn install",
+  "build": "yarn build",
+  "bridge": "src",
+  "serve": "yarn serve"
+ },
+ "tags": "",
+ "WailsVersion": "",
+ "CrossCompile": false,
+ "Platform": "",
+ "Architecture": "",
+ "LdFlags": "",
+ "GoPath": "",
+ "UseFirebug": false
+}
