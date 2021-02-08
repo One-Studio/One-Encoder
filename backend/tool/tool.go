@@ -157,7 +157,7 @@ func getCurrentDirectory() string {
 
 //规格化路径
 func FormatPath(s string) string {
-	if strings.HasPrefix(s, "."){
+	if strings.HasPrefix(s, ".") {
 		s = strings.Replace(s, ".", getCurrentDirectory(), 1)
 	}
 	s = strings.Replace(s, "\\", "/", -1)

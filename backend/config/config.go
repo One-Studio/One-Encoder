@@ -7,24 +7,6 @@ import (
 	"os"
 )
 
-type API struct {
-	win   string
-	mac   string
-	linux string
-}
-
-type CFG struct {
-	version       string
-	srcPath       string
-	dstPath       string
-	param         string
-	api           API
-	ffmpegPath    string
-	ffmpegVersion string
-	ffmpegRegExp  string
-	Init		  bool
-}
-
 //读设置
 func ReadConfig(path string) (CFG, error) {
 	//检查文件是否存在

@@ -1,5 +1,7 @@
 package config
 
+/// 默认设置
+
 var defaultCFG = CFG{
 	version: "0.0.1",
 	srcPath: "",

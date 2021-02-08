@@ -2,7 +2,7 @@ package backend
 
 import (
 	"One-Encoder/backend/config"
-	"One-Encoder/backend/tool"
+	tool "One-Encoder/backend/tool"
 	"fmt"
 	"github.com/wailsapp/wails"
 	"log"
@@ -63,12 +63,16 @@ func (a *App) ParseDragFiles() (string, error) {
 	return "", nil
 }
 
-func (a *App) StartEncoding(tool string) (string, error) {
+func (a *App) StartEncoding(toolSelected string) error {
+	//得到指令
 	command := "1"
+
+	//执行
 	if output, err := tool.Cmd(command); err != nil {
-		fmt.Println(output)
+		a.noticeError(output)
+		return err
 	}
-	return "", nil
+	return nil
 }
 
 func (a *App) PauseEncoding() (string, error) {

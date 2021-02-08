@@ -9,4 +9,3 @@ type ReleaseDelivr struct {
 	Format       int      `json:"Format"`
 	ReleaseNote  string   `json:"ReleaseNote"`
 }
-

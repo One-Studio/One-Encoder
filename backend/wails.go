@@ -59,7 +59,7 @@ func (a *App) noticeWarning(msg string) {
 func (a *App) SelectDirectory() string {
 	directory := a.runtime.Dialog.SelectDirectory()
 	if ok, err := tool.IsFileExisted(directory); err != nil || !ok {
-		_ = tool.WriteFast("./cancel.txt", "取消安装" + err.Error())
+		_ = tool.WriteFast("./cancel.txt", "取消安装"+err.Error())
 		a.noticeError("文件夹不存在或者未选择 " + err.Error())
 		return ""
 	}
@@ -99,5 +99,3 @@ func (a *App) SelectFileTitleFilter(Title string, Filter string) string {
 
 	return path
 }
-
-
