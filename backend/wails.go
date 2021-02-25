@@ -7,6 +7,22 @@ import (
 
 ///// wails.go存放backend包对frontend细粒度交互的操作
 
+//设置go变量
+func (a *App) SetSrcPath(path string)  {
+	a.cfg.SrcPath = path
+}
+
+func (a *App) SetDstPath(path string)  {
+	a.cfg.DstPath = path
+}
+
+func (a *App) SetParam(name string, param string)  {
+	t := a.cfg.Tools[name]
+	t.Param = param
+	fmt.Println("参数", name, param)
+}
+
+
 //测试发送信息
 func (a *App) SayHello() string {
 	fmt.Println("Hello to Backend!")
@@ -16,8 +32,8 @@ func (a *App) SayHello() string {
 }
 
 //设置进度条
-func (a *App) setProgress(percent int) {
-	a.runtime.Events.Emit("SetProgess", percent)
+func (a *App) setProgress(progress float64) {
+	a.runtime.Events.Emit("SetProgess", progress)
 }
 
 //设置日志信息

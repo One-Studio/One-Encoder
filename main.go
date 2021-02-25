@@ -14,7 +14,7 @@ func main() {
 	//创建app
 	app := wails.CreateApp(&wails.AppConfig{
 		Width:     720,
-		Height:    290,
+		Height:    340,
 		Title:     "One Encoder",
 		JS:        js,
 		CSS:       css,

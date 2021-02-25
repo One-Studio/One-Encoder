@@ -1,0 +1,52 @@
+{
+    "AppVersion": "0.1.0 alpha",
+    "SrcPath": "C:/Users/Purp1e/Videos/测试.mp4",
+    "DstPath": "C:/Users/Purp1e/Desktop/测试One-Encoder.mp4",
+    "Tools": {
+        "ffmpeg": {
+            "Path": "C:/Users/Purp1e/go/src/github.com/One-Studio/One-Encoder/build/tools/ffmpeg.exe",
+            "Exist": false,
+            "Version": "",
+            "InputPrefix": "-i",
+            "OutputPrefix": "",
+            "ProgressPattern": "",
+            "API": {},
+            "CdnAPI": {},
+            "Param": "-vcodec libx264 -crf 17 -preset slower"
+        },
+        "mediainfo": {
+            "Path": "./tools/mediainfo/mediainfo.exe",
+            "Exist": false,
+            "Version": "",
+            "InputPrefix": "",
+            "OutputPrefix": "",
+            "ProgressPattern": "",
+            "API": {},
+            "CdnAPI": {},
+            "Param": ""
+        },
+        "x264": {
+            "Path": "./tools/x264/x264.exe",
+            "Exist": false,
+            "Version": "",
+            "InputPrefix": "",
+            "OutputPrefix": "--output",
+            "ProgressPattern": "",
+            "API": {},
+            "CdnAPI": {},
+            "Param": "--crf 17 --preset slower"
+        },
+        "x265": {
+            "Path": "./tools/x265/x265.exe",
+            "Exist": false,
+            "Version": "",
+            "InputPrefix": "",
+            "OutputPrefix": "--output",
+            "ProgressPattern": "",
+            "API": {},
+            "CdnAPI": {},
+            "Param": ""
+        }
+    },
+    "Init": false
+}

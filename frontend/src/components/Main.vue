@@ -78,10 +78,10 @@ export default {
   name: "Main",
   data() {
     return {
-      srcPath: '',
-      dstPath: '',
+      srcPath: 'C:/Users/Purp1e/Videos/测试.mp4',
+      dstPath: 'C:/Users/Purp1e/Desktop/测试One-Encoder.mp4',
       param: {
-        ffmpeg: '',
+        ffmpeg: '-vcodec libx264 -crf 20 -preset slow',
         x264: '',
         x265: ''
       },
@@ -109,6 +109,11 @@ export default {
     this.checkUpdate();
   },
   methods: {
+    setVar () {
+      window.backend.App.SetSrcPath(this.srcPath)
+      window.backend.App.SetDstPath(this.dstPath)
+      window.backend.App.SetParam(this.select, this.param[this.select])
+    },
     getSrcPath () {
       window.backend.App.GetSrcPath().then(path => {
           this.srcPath = path
@@ -120,6 +125,7 @@ export default {
       });
     },
     onStart () {
+      this.setVar()
       //debug
       // this.status = !this.status
       //根据情况决定开始/结束压制
@@ -130,8 +136,9 @@ export default {
       }
     },
     StartEncoding () {
+      this.status = true
       window.backend.App.StartEncoding(this.select).then(() => {
-
+        this.status = false
       });
     },
     PauseEncoding () {

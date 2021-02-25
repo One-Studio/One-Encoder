@@ -16,6 +16,6 @@ One-Encoder.exe.manifest
 One-Encoder-res.syso
 One-Encoder.rc
 info.plist
-build/win/ffmpeg.exe
-build/win/x264.exe
-build/win/x265.exe
+build/tools/ffmpeg.exe
+build/tools/x264.exe
+build/tools/x265.exe

@@ -1,7 +1,9 @@
 package tool
 
 import (
+	"bufio"
 	"errors"
+	"fmt"
 	"github.com/gen2brain/go-unarr"
 	"io/ioutil"
 	"log"
@@ -14,6 +16,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"syscall"
 )
 
 //打开文件和读内容 利用io/ioutil
@@ -214,4 +217,101 @@ func Cmd(command string) (string, error) {
 	}
 	//cmd.Args = a
 	return string(out), err
+}
+
+func CmdRealtime(path string, arg string, method func(progress float64))  {
+	//command := "./x264 /Users/purp1e/vd/in.mp4 --crf 18 --preset 3 -o /Users/purp1e/vd/outx264.mp4"
+	//command := "ffmpeg -i /Users/purp1e/vd/in.mp4 -vcodec libx264 -crf 18 -preset 3 -acodec copy /Users/purp1e/vd/out3.mp4 -y"
+	var cmd *exec.Cmd
+	if runtime.GOOS == "windows" {
+		//cmd = exec.Command("cmd.exe", "/c", command)
+		args := strings.Split(arg, " ")
+		cmd = exec.Command(path, args...)
+
+	} else {
+		cmd = exec.Command("/bin/bash", path + " " + arg)
+		//cmd = exec.Command("/bin/bash", "-c", command)
+	}
+
+	//隐藏黑框
+	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
+
+	stderr, _ := cmd.StderrPipe()
+	defer stderr.Close()
+	stdin, _ := cmd.StdinPipe()
+	defer stdin.Close()
+	_ = cmd.Start()
+	//原方法
+	scanner := bufio.NewScanner(stderr)
+	scanner.Split(bufio.ScanRunes)
+
+	go func() {
+		var line, t string
+		var durationOK, fpsOK, processOK bool
+		var time float64
+		var fps float64
+		var totalFrames uint64
+		d := regexp.MustCompile("Duration: (([\\d]+):([\\d]+):([\\d]+).([\\d]+)),")
+		f := regexp.MustCompile("([\\d]+) fps,")	//TODO fps可能是小数
+		r := regexp.MustCompile("(frame= *\\s*(\\d+) *fps=\\s*[\\d.]+ *q= *\\s*[\\d.-]+ (L?)size=\\s*[\\d\\S]+ *time=[\\d:.]+ bitrate= *[\\d.]*\\S?bits/s speed= *\\s*[\\d.]+x)")
+		//
+		//end := regexp.MustCompile("(frame=\\s*\\d+ fps=\\s*[\\d.]+ q=\\s*[\\d.]+ Lsize=\\s*[\\d\\S]+ time=[\\d:.]+ bitrate=[\\d.]*\\S?bits/s speed=\\s*[\\d.]+x)")
+		//Duration: 00:00:06.45
+		//Stream #0:0(und): Video: h264 (High 4:4:4 Predictive) (avc1 / 0x31637661), yuv420p,
+		//1920x1080 [SAR 1:1 DAR 16:, 350821 kb/s, 60 fps, 60 tbr, 15360 tbn, 120 tbc (default)
+		for scanner.Scan() {
+			t = scanner.Text()
+			line += t
+			if t == "\n" {
+				//fmt.Print("获得: " + line)
+				line = ""
+			} else {
+				if durationOK == false {
+					res := d.FindStringSubmatch(line)
+					if len(res) == 6 {
+						durationOK = true
+						//fmt.Println("Duration:", line)
+						//fmt.Println("匹配时长：", res)
+						line = ""
+						//获取时长s
+						hour,_ := strconv.Atoi(res[2])
+						minute,_ := strconv.Atoi(res[3])
+						second,_ := strconv.Atoi(res[4])
+						frac,_ :=strconv.ParseFloat(res[5], 64)
+						time = float64(hour*3600 + minute*60 + second) + frac / 100
+						fmt.Println("视频时长:", time, "s")
+					}
+				} else if fpsOK == false {
+					res := f.FindStringSubmatch(line)
+					if len(res) == 2 {
+						fpsOK = true
+						//fmt.Println("匹配帧率：", res)
+						line = ""
+						//获取帧率fps和视频总帧数
+						fps,_ =strconv.ParseFloat(res[1], 64)
+						totalFrames = uint64(fps * time)
+					}
+				} else if processOK == false{
+					res := r.FindStringSubmatch(line)
+					if len(res) == 4 {
+						//获得进度
+						t, _ := strconv.ParseUint(res[2],10, 64)
+						progress := float64(t * 10000 / totalFrames) / 100
+
+						//处理进度数据，调用时指定
+						method( progress )
+						//count := int(t * 100 / totalFrames)
+						//fmt.Printf("\r%v%v %3v%%\n", strings.Repeat("▇", count/2), strings.Repeat("░", 50-count/2), count)
+						line = ""
+						//
+						if res[3] == "L" {
+							fmt.Println("编码结束！")
+						}
+					}
+				}
+			}
+		}
+	}()
+
+	_ = cmd.Wait()
 }

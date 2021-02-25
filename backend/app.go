@@ -48,14 +48,12 @@ func (a *App) SetVar() {
 	//a.setVersionCode(a.cfg.VersionCode)
 }
 
-func (a *App) SelectSrcPath() (string, error) {
-
-	return "", nil
+func (a *App) SelectSrcPath() string {
+	return a.SelectFileTitle("选择输入路径")
 }
 
-func (a *App) SelectDstPath() (string, error) {
-
-	return "", nil
+func (a *App) SelectDstPath() string {
+	return a.SelectFileTitle("选择输出路径")
 }
 
 func (a *App) ParseDragFiles() (string, error) {
@@ -63,15 +61,36 @@ func (a *App) ParseDragFiles() (string, error) {
 	return "", nil
 }
 
-func (a *App) StartEncoding(toolSelected string) error {
+func (a *App) checkTools() {
+
+}
+
+
+func (a *App) StartEncoding(name string) error {
+	//t := a.cfg.Tools[name]
+	//判断存在
+	//if ok, err := tool.IsFileExisted(t.Path); err != nil || !ok {
+	//	return errors.New("tool " + name + " does not exist")
+	//}
+
+	path := "C:/Users/Purp1e/go/src/github.com/One-Studio/One-Encoder/build/tools/ffmpeg.exe"
+	input := "C:/Users/Purp1e/Videos/测试.mp4"
+	output := "C:/Users/Purp1e/Desktop/测试One-Encoder.mp4"
+	param := "-vcodec libx264 -crf 20 -preset slow"
+
+	//command := path + " -i " + input + " " + param + " " + output + " -y"
+	arg := "-i " + input + " " + param + " " + output + " -y"
 	//得到指令
-	command := "1"
+	//command := t.Path + " " + t.InputPrefix + " " + a.cfg.SrcPath + " " + t.Param + " " + t.OutputPrefix + " " + a.cfg.DstPath
 
 	//执行
-	if output, err := tool.Cmd(command); err != nil {
-		a.noticeError(output)
-		return err
-	}
+	tool.CmdRealtime(path, arg, func(progress float64) {
+		a.setProgress(progress)
+	})
+	//if output, err := tool.Cmd(command); err != nil {
+	//	a.noticeError(output)
+	//	return err
+	//}
 	return nil
 }
 
