@@ -39,16 +39,17 @@ export default {
 
 <style>
 .container {
-  height: 100%;
-  width: 100vw;
+  height: 360px;
+  width: 600px;
   position: fixed;
+  /*background-color: black;*/
   background-color: #fefefe;
   /*width: 680px;*/
 }
 
 .card-container {
   overflow: hidden;
-  padding: 0.25vw 0.5vw 0.25vw 0.5vw;
+  padding: 4px 8px 4px;
   /*margin-top: -1vw;*/
 }
 </style>

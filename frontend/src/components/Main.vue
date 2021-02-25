@@ -1,28 +1,28 @@
 <template>
   <div class="main-container">
-    <div class="panel" style="margin-top: 1vw">
+    <div class="panel" style="margin-top: 8px">
       <a-input-search v-model="srcPath" addon-before="文件路径" class="input" placeholder="" size="large" @search="onSearch">
         <a-button slot="enterButton" @click="getSrcPath" class="search-button">
-          <a-icon type="folder" style="margin: auto;font-size: 2.25vw" />
+          <a-icon type="folder" style="margin: auto;" />
         </a-button>
       </a-input-search>
     </div>
     <div class="panel">
       <a-input-search v-model="dstPath" addon-before="输出路径" class="input" placeholder="" size="large" @search="onSearch">
         <a-button slot="enterButton" @click="getDistPath" class="search-button">
-          <a-icon type="folder" style="margin: auto;font-size: 2.25vw"/>
+          <a-icon type="folder" style="margin: auto;"/>
         </a-button>
       </a-input-search>
     </div>
     <div class="panel">
       <a-radio-group size="large" v-model="select" @change="onChange">
-        <a-radio-button value="ffmpeg" style="font-size: 2vw;height: 5vw;line-height: 5vw;">
+        <a-radio-button value="ffmpeg" style="">
           ffmpeg
         </a-radio-button>
-        <a-radio-button value="x264" style="font-size: 2vw;height: 5vw;line-height: 5vw;">
+        <a-radio-button value="x264" style="">
           x264
         </a-radio-button>
-        <a-radio-button value="x265" style="font-size: 2vw;height: 5vw;line-height: 5vw;">
+        <a-radio-button value="x265" style="">
           x265
         </a-radio-button>
       </a-radio-group>
@@ -31,7 +31,7 @@
       <!--  TODO: 压制代码块样式    -->
       <a-textarea  placeholder="压制代码"
                    size="large"
-                   style="font-size: 2.25vw;padding: 0.75vw 1vw 0.75vw"
+                   style=""
                    :auto-size="{ minRows: 4, maxRows: 4}"
                    v-model="param[select]"
       />
@@ -158,42 +158,44 @@ export default {
 <style scoped>
 
 /deep/ .ant-input-lg {
-  height: 5vw;
-  font-size: 2vw;
+  /*height: 5vw;*/
+  /*font-size: 2vw;*/
 }
 
 /deep/ .ant-input-group-addon {
-  font-size: 2.25vw;
-  height: 5vw;
-  padding-left: 2vw;
-  padding-right: 2vw;
+  /*font-size: 2.25vw;*/
+  /*height: 5vw;*/
+  /*padding-left: 2vw;*/
+  /*padding-right: 2vw;*/
 }
 
 .tool-select {
-  font-size: 2.25vw;
-  height: 10vw;
+  /*font-size: 2.25vw;*/
+  /*height: 10vw;*/
 }
 
 
 .search-button{
-  height: 5vw;
+  /*height: 5vw;*/
 }
 
 .main-container{
+  width: 100%;
+  /*height: 100px;*/
   /*padding: 50x;*/
   /*margin: 0px 8px 8px 8px;*/
 }
 
 .btn {
   float: right;
-  width: 15vw;
-  height: 5vw;
-  font-size: 2vw;
+  /*width: 60px;*/
+  /*height: 40px;*/
+  font-size: 16px;
   /*box-shadow: 0 0.25vw 2vw rgba(0,0,0,0.2);*/
 }
 
 .dragArea {
-  height: 15vw;
+  height: 300px;
   margin: auto;
   border: 1px solid rgba(0,0,0,0.4);
   border-radius: 0.5vw;
@@ -204,11 +206,11 @@ export default {
 }
 
 .progressbar{
-  font-size: 2vw;
-  margin-right: 5vw;
-  margin-top: 1vw;
+  font-size: 16px;
+  margin-right: 4px;
+  margin-top: 6px;
   /*width: 70vw;*/
-  max-width: 75vw;
+  max-width: 85%;
 }
 
 .panel{
@@ -217,8 +219,9 @@ export default {
 }
 
 input {
-  height: 12vw;font-size: 6vw;
-  border-radius: 0.5vw;
+  /*height: 12vw;*/
+  /*font-size: 6vw;*/
+  /*border-radius: 0.5vw;*/
 }
 
 </style>
