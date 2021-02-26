@@ -1,72 +1,40 @@
 <template>
-  <div class="main-container">
-    <div class="panel" style="margin-top: 8px">
-      <a-input-search v-model="srcPath" addon-before="文件路径" class="input" placeholder="" size="large" @search="onSearch">
-        <a-button slot="enterButton" @click="getSrcPath" class="search-button">
-          <a-icon type="folder" style="margin: auto;" />
-        </a-button>
-      </a-input-search>
-    </div>
-    <div class="panel">
-      <a-input-search v-model="dstPath" addon-before="输出路径" class="input" placeholder="" size="large" @search="onSearch">
-        <a-button slot="enterButton" @click="getDistPath" class="search-button">
-          <a-icon type="folder" style="margin: auto;"/>
-        </a-button>
-      </a-input-search>
-    </div>
-    <div class="panel">
-      <a-radio-group size="large" v-model="select" @change="onChange">
-        <a-radio-button value="ffmpeg" style="">
-          ffmpeg
-        </a-radio-button>
-        <a-radio-button value="x264" style="">
-          x264
-        </a-radio-button>
-        <a-radio-button value="x265" style="">
-          x265
-        </a-radio-button>
-      </a-radio-group>
-    </div>
-    <div class="panel">
-      <!--  TODO: 压制代码块样式    -->
-      <a-textarea  placeholder="压制代码"
-                   size="large"
-                   style=""
-                   :auto-size="{ minRows: 4, maxRows: 4}"
-                   v-model="param[select]"
-      />
-<!--      border-radius: 1vw;-->
-    </div>
-<!--    <div class="panel">-->
-<!--      <div class="dragArea">-->
-<!--        拖拽-->
-<!--      </div>-->
-<!--    </div>-->
-    <div class="panel" style="">
-      <a-progress
-          size="large"
-          stroke-linecap="round"
-          :percent="progress"
-          class="progressbar"
-          strokeWidth="10"
-          :stroke-color="{
-                       from: '#108ee9',
-                       to: '#87d068',
-                     }"
-      />
-<!--      <a-space>-->
-<!--      <span  style="right: 0">-->
-<!--        <a-button size="large" class="btn" style="width: 10vw">-->
-<!--          结束-->
-<!--        </a-button>-->
-<!--      </span>-->
-      <a-button size="large" class="btn" @click="onStart">
-        <span v-if='status===false'>开始</span>
-        <span v-else>结束</span>
-      </a-button>
-        <!--          <a-icon type="caret-right" />-->
-        <!--          <a-icon type="pause" />-->
-<!--      </a-space>-->
+  <div >
+    <div class="q-gutter-y-md" style="max-width: 600px">
+      <q-card>
+        <q-tabs
+            v-model="tab"
+            dense
+            class="bg-grey-1"
+            active-color="primary"
+            indicator-color="primary"
+            align="left"
+            narrow-indicator
+        >
+          <q-tab name="main" label="主要" />
+          <q-tab name="setting" label="设置" />
+          <q-tab name="about" label="关于" />
+        </q-tabs>
+
+        <q-separator />
+
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel name="main">
+            <div>Mails</div>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </q-tab-panel>
+
+          <q-tab-panel name="setting">
+            <div class="text-h6">Alarms</div>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </q-tab-panel>
+
+          <q-tab-panel name="about">
+            <div class="text-h6">Movies</div>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </q-tab-panel>
+        </q-tab-panels>
+      </q-card>
     </div>
   </div>
 </template>
@@ -78,6 +46,8 @@ export default {
   name: "Main",
   data() {
     return {
+      tab: 'main',
+      opacity: 0,
       srcPath: 'C:/Users/Purp1e/Videos/测试.mp4',
       dstPath: 'C:/Users/Purp1e/Desktop/测试One-Encoder.mp4',
       param: {
@@ -107,6 +77,7 @@ export default {
     window.backend.App.SetVar();
     //检查更新
     this.checkUpdate();
+    this.opacity = 1;
   },
   methods: {
     setVar () {
@@ -156,72 +127,9 @@ export default {
 </script>
 
 <style scoped>
-
-/deep/ .ant-input-lg {
-  /*height: 5vw;*/
-  /*font-size: 2vw;*/
-}
-
-/deep/ .ant-input-group-addon {
-  /*font-size: 2.25vw;*/
-  /*height: 5vw;*/
-  /*padding-left: 2vw;*/
-  /*padding-right: 2vw;*/
-}
-
-.tool-select {
-  /*font-size: 2.25vw;*/
-  /*height: 10vw;*/
-}
-
-
-.search-button{
-  /*height: 5vw;*/
-}
-
 .main-container{
   width: 100%;
-  /*height: 100px;*/
-  /*padding: 50x;*/
-  /*margin: 0px 8px 8px 8px;*/
-}
-
-.btn {
-  float: right;
-  /*width: 60px;*/
-  /*height: 40px;*/
-  font-size: 16px;
-  /*box-shadow: 0 0.25vw 2vw rgba(0,0,0,0.2);*/
-}
-
-.dragArea {
-  height: 300px;
-  margin: auto;
-  border: 1px solid rgba(0,0,0,0.4);
-  border-radius: 0.5vw;
-  padding: 1.25vw;
-  font-size: 2.25vw;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.progressbar{
-  font-size: 16px;
-  margin-right: 4px;
-  margin-top: 6px;
-  /*width: 70vw;*/
-  max-width: 85%;
-}
-
-.panel{
-  /*margin: 0.5vw 0.25vw 0;*/
-  /*height: 10vw;*/
-}
-
-input {
-  /*height: 12vw;*/
-  /*font-size: 6vw;*/
-  /*border-radius: 0.5vw;*/
+  transition: all 1s ease;
 }
 
 </style>

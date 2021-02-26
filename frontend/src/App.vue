@@ -1,20 +1,6 @@
 <template>
-  <div id="app" class="container">
-    <div class="card-container">
-<!--      <a-tabs>-->
-<!--        <a-tab-pane key="1" tab="主页">-->
-          <Main/>
-<!--        </a-tab-pane>-->
-<!--        <a-tab-pane key="2" tab="设置">-->
-<!--          <Setting/>-->
-<!--        </a-tab-pane>-->
-<!--        <a-tab-pane key="3" tab="测试">-->
-<!--          <Test/>-->
-<!--        </a-tab-pane>-->
-        <!--        <p slot="tabBarExtraContent" style="margin-right: 10px ">One Encoder</p>-->
-        <!--        <a-button slot="tabBarExtraContent">One Encoder</a-button>-->
-<!--      </a-tabs>-->
-    </div>
+  <div id="app" class="container" :style="`transform: scale(${scale});opacity: ${opacity}`">
+    <Main/>
   </div>
 </template>
 
@@ -32,8 +18,21 @@ export default {
     // Test
   },
   data() {
-    return {};
+    return {
+      scale: 1,
+      opacity: 0
+    };
   },
+  mounted() {
+    this.adaptScale()
+    this.opacity = 1
+  },
+  methods: {
+    adaptScale () {
+      let h = document.body.clientWidth; //获得屏幕宽度
+      this.scale = h/600;
+    }
+  }
 };
 </script>
 
@@ -44,12 +43,7 @@ export default {
   position: fixed;
   /*background-color: black;*/
   background-color: #fefefe;
-  /*width: 680px;*/
-}
-
-.card-container {
-  overflow: hidden;
-  padding: 4px 8px 4px;
-  /*margin-top: -1vw;*/
+  transition: opacity 0.3s ease;
+  transform-origin: left top;
 }
 </style>
