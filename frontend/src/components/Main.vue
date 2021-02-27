@@ -1,41 +1,62 @@
 <template>
-  <div >
-    <div class="q-gutter-y-md" style="max-width: 600px">
-      <q-card>
-        <q-tabs
-            v-model="tab"
-            dense
-            class="bg-grey-1"
-            active-color="primary"
-            indicator-color="primary"
-            align="left"
-            narrow-indicator
-        >
-          <q-tab name="main" label="主要" />
-          <q-tab name="setting" label="设置" />
-          <q-tab name="about" label="关于" />
-        </q-tabs>
+  <div>
+    <el-input class="panel" :span="24" placeholder="请选择文件" v-model="srcPath">
+      <template slot="prepend">输入</template>
+      <el-button slot="append" icon="el-icon-folder"></el-button>
+    </el-input>
+    <el-input class="panel" placeholder="请选择文件" v-model="dstPath">
+      <template slot="prepend">输出</template>
+      <el-button slot="append" icon="el-icon-folder"></el-button>
+    </el-input>
 
-        <q-separator />
+    <el-row class="panel" type="flex" justify="space-between">
+      <el-col :span="8">
+        <el-radio-group v-model="select"  size="small">
+          <el-radio-button :label=0>111111</el-radio-button>
+          <el-radio-button :label=1>2222</el-radio-button>
+          <el-radio-button :label=2>33</el-radio-button>
+        </el-radio-group>
+      </el-col>
+      <el-col :span="8" :offset="4">
+        <el-radio-group v-model="select"  size="small">
+          <el-radio-button :label=0>111111</el-radio-button>
+          <el-radio-button :label=1>2222</el-radio-button>
+          <el-radio-button :label=2>33</el-radio-button>
+        </el-radio-group>
+      </el-col>
+    </el-row>
 
-        <q-tab-panels v-model="tab" animated>
-          <q-tab-panel name="main">
-            <div>Mails</div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          </q-tab-panel>
+    <el-input
+        class="panel"
+        type="textarea"
+        :rows="4"
+        placeholder="压制代码"
+        v-model="param[select]">
+    </el-input>
 
-          <q-tab-panel name="setting">
-            <div class="text-h6">Alarms</div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          </q-tab-panel>
-
-          <q-tab-panel name="about">
-            <div class="text-h6">Movies</div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          </q-tab-panel>
-        </q-tab-panels>
-      </q-card>
-    </div>
+    <el-row class="progress">
+      <el-col :span="2">
+        <el-progress
+                     type="circle"
+                     width="20"
+                     stroke-linecap="square"
+                     :text-inside="true"
+                     :stroke-width="2"
+                     :percentage="66.57"
+        ></el-progress>
+      </el-col>
+      <el-col :span="14">
+        111
+      </el-col>
+      <el-col :span="4">
+        <el-button>暂停</el-button>
+      </el-col>
+      <el-col :span="3">
+        <el-button>开始</el-button>
+      </el-col>
+    </el-row>
+<!--    <br>压制代码档位-->
+<!--    <br>信息-->
   </div>
 </template>
 
@@ -46,90 +67,140 @@ export default {
   name: "Main",
   data() {
     return {
-      tab: 'main',
-      opacity: 0,
       srcPath: 'C:/Users/Purp1e/Videos/测试.mp4',
       dstPath: 'C:/Users/Purp1e/Desktop/测试One-Encoder.mp4',
-      param: {
-        ffmpeg: '-vcodec libx264 -crf 20 -preset slow',
-        x264: '',
-        x265: ''
-      },
-      select: 'ffmpeg',
-      progress: 0,
-      status: false  //是否正在执行
+      param: [
+        '-vcodec libx264 -crf 20 -preset slow',
+        '',
+        ''
+      ],
+      select: 0,
+      presetSelect: 0,
+      // toolSelect: 0,
+      // progress: 0,
+      // status: false  //是否正在执行
     };
   },
   mounted() {
-    Wails.Events.On("SetProgess", (progress) => {
-      this.progress = progress;
-    });
-    Wails.Events.On("NoticeSuccess", (msg) => {
-      this.$message.success(msg, 5);
-    });
-    Wails.Events.On("NoticeError", (msg) => {
-      this.$message.error(msg, 5);
-    });
+    // let dropbox = document.getElementById('drop_area');
+    // dropbox.addEventListener("drop",this.eventDrop,false)
+    // dropbox.addEventListener("dragleave",function (e) {
+    //   e.stopPropagation();
+    //   e.preventDefault();
+    //   this.borderhover =  false;
+    // })
+    // dropbox.addEventListener("dragenter",function (e) {
+    //   e.stopPropagation();
+    //   e.preventDefault();
+    //   this.borderhover =  true;
+    // })
+    // dropbox.addEventListener("dragover",function (e) {
+    //   e.stopPropagation();
+    //   e.preventDefault();
+    //   this.borderhover =  true
+    // })
+    // Wails.Events.On("SetProgess", (progress) => {
+    //   this.progress = progress;
+    // });
+    // Wails.Events.On("NoticeSuccess", (msg) => {
+    //   this.$message.success(msg, 5);
+    // });
+    // Wails.Events.On("NoticeError", (msg) => {
+    //   this.$message.error(msg, 5);
+    // });
     Wails.Events.On("NoticeWarning", (msg) => {
       this.$message.warning(msg, 5);
     });
-    //通知传参
-    window.backend.App.SetVar();
-    //检查更新
-    this.checkUpdate();
-    this.opacity = 1;
+    // //通知传参
+    // window.backend.App.SetVar();
+    // //检查更新
+    // this.checkUpdate();
   },
   methods: {
-    setVar () {
-      window.backend.App.SetSrcPath(this.srcPath)
-      window.backend.App.SetDstPath(this.dstPath)
-      window.backend.App.SetParam(this.select, this.param[this.select])
-    },
-    getSrcPath () {
-      window.backend.App.GetSrcPath().then(path => {
-          this.srcPath = path
-      });
-    },
-    getDistPath () {
-      window.backend.App.GetDistPath().then(path => {
-        this.dstPath = path
-      });
-    },
-    onStart () {
-      this.setVar()
-      //debug
-      // this.status = !this.status
-      //根据情况决定开始/结束压制
-      if (this.status === false) {
-        this.StartEncoding()
-      } else {
-        this.QuitEncoding()
-      }
-    },
-    StartEncoding () {
-      this.status = true
-      window.backend.App.StartEncoding(this.select).then(() => {
-        this.status = false
-      });
-    },
-    PauseEncoding () {
-      window.backend.App.PauseEncoding().then(() => {
-
-      });
-    },
-    QuitEncoding () {
-      window.backend.App.QuitEncoding().then(() => {
-
-      });
-    }
+    // eventDrop: function(e){
+    //   this.borderhover = false
+    //   e.stopPropagation();
+    //   e.preventDefault();  //必填字段
+    //   let efile = e.dataTransfer.files[0];
+    //   console.log(efile.path);
+      // let fileData = e.dataTransfer.files;
+      // console.log(fileData);
+      // this.uploadFile(fileData)
+    // },
+    // uploadFile: function (file){   //渲染上传文件
+    //   console.log(file)
+      // for (let i = 0; i !== file.length; i++) {
+      //   let fileJson = {
+      //     Url:'',
+      //     progressStatl:0,
+      //     fileText:'',
+      //   };
+      //   let video_type=file[i].type == "video/mp4" || file[i].type == "video/ogg";
+      //   if(file[i].type.indexOf('image') === 0){  //如果是图片
+      //     let fileurl = window.URL.createObjectURL(file[i]); //创建一个url连接,供src属性引用
+      //     fileJson.Url = fileurl;
+      //   }else if(video_type){
+      //     alert("不支持此类型文件")
+      //   }
+      //   fileJson.fileText = file[i].name;
+        // this.fileData.push(fileJson);
+      // }
+    // setVar () {
+    //   window.backend.App.SetSrcPath(this.srcPath)
+    //   window.backend.App.SetDstPath(this.dstPath)
+    //   window.backend.App.SetParam(this.select, this.param[this.select])
+    // },
+    // getSrcPath () {
+    //   window.backend.App.GetSrcPath().then(path => {
+    //       this.srcPath = path
+    //   });
+    // },
+    // getDistPath () {
+    //   window.backend.App.GetDistPath().then(path => {
+    //     this.dstPath = path
+    //   });
+    // },
+    // onStart () {
+    //   this.setVar()
+    //   //debug
+    //   // this.status = !this.status
+    //   //根据情况决定开始/结束压制
+    //   if (this.status === false) {
+    //     this.StartEncoding()
+    //   } else {
+    //     this.QuitEncoding()
+    //   }
+    // },
+    // StartEncoding () {
+    //   this.status = true
+    //   window.backend.App.StartEncoding(this.select).then(() => {
+    //     this.status = false
+    //   });
+    // },
+    // PauseEncoding () {
+    //   window.backend.App.PauseEncoding().then(() => {
+    //
+    //   });
+    // },
+    // QuitEncoding () {
+    //   window.backend.App.QuitEncoding().then(() => {
+    //
+    //   });
+    // }
   }
 }
 </script>
 
 <style scoped>
-.main-container{
-  width: 100%;
-  transition: all 1s ease;
+.panel {
+  width: 580px;
+  padding-bottom: 10px;
+  overflow: hidden;
+  /*屏蔽滚动条*/
+  -ms-overflow-style: none;
 }
 
+.progress {
+  padding-bottom: 10px;
+}
 </style>
