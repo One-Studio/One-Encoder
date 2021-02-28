@@ -9,52 +9,63 @@
       <el-button slot="append" icon="el-icon-folder"></el-button>
     </el-input>
 
-    <el-row class="panel" type="flex" justify="space-between">
-      <el-col :span="8">
+  <div class="panel">
+     <span style="float: left">
         <el-radio-group v-model="select"  size="small">
-          <el-radio-button :label=0>111111</el-radio-button>
-          <el-radio-button :label=1>2222</el-radio-button>
-          <el-radio-button :label=2>33</el-radio-button>
+          <el-radio-button :label=0>ffmpeg</el-radio-button>
+          <el-radio-button :label=1>x264</el-radio-button>
+          <el-radio-button :label=2>x265</el-radio-button>
         </el-radio-group>
-      </el-col>
-      <el-col :span="8" :offset="4">
-        <el-radio-group v-model="select"  size="small">
-          <el-radio-button :label=0>111111</el-radio-button>
-          <el-radio-button :label=1>2222</el-radio-button>
-          <el-radio-button :label=2>33</el-radio-button>
+      </span>
+    <span style="float: right;margin-right: 0">
+        <el-radio-group v-model="presetSelect"  size="small">
+          <el-radio-button :label=0>预设1</el-radio-button>
+          <el-radio-button :label=1>预设2</el-radio-button>
+          <el-radio-button :label=2>预设3</el-radio-button>
         </el-radio-group>
-      </el-col>
-    </el-row>
+      </span>
+  </div>
 
-    <el-input
-        class="panel"
-        type="textarea"
-        :rows="4"
-        placeholder="压制代码"
-        v-model="param[select]">
-    </el-input>
+  <el-input
+      class="panel"
+      type="textarea"
+      :rows="4"
+      placeholder="压制代码"
+      v-model="param[select]">
+  </el-input>
 
-    <el-row class="progress">
-      <el-col :span="2">
+  <el-row class="panel"  type="flex">
+    <el-col span="2">
+      <span style="float: left;margin: 9px;height: 40px;">
         <el-progress
-                     type="circle"
-                     width="20"
-                     stroke-linecap="square"
-                     :text-inside="true"
-                     :stroke-width="2"
-                     :percentage="66.57"
+            type="circle"
+            width="20"
+            stroke-linecap="square"
+            :text-inside="true"
+            :stroke-width="2"
+            :percentage="66.57"
         ></el-progress>
-      </el-col>
-      <el-col :span="14">
-        111
-      </el-col>
-      <el-col :span="4">
+      </span>
+    </el-col>
+    <el-col span="14">
+      <span style=";">
+        <div style="margin-top: 10px;margin-left: -10px;height: 40px">
+          111asdfasdfasdflajsl;dfkjal;sdkjfasdfasdfasdasdfasdfs
+        </div>
+      </span>
+    </el-col>
+    <el-col span="4">
+      <span  style="float: right;margin-right: -16px">
         <el-button>暂停</el-button>
-      </el-col>
-      <el-col :span="3">
-        <el-button>开始</el-button>
-      </el-col>
-    </el-row>
+      </span>
+    </el-col>
+    <el-col span="4">
+      <span  style="float: right;margin-right: 0">
+          <el-button>开始</el-button>
+      </span>
+    </el-col>
+  </el-row>
+
 <!--    <br>压制代码档位-->
 <!--    <br>信息-->
   </div>
