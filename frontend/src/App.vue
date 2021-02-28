@@ -61,7 +61,7 @@ export default {
 
 <style>
 .container {
-  height: 400px;
+  height: 380px;
   width: 640px;
   position: fixed;
   /*background-color: black;*/

@@ -29,7 +29,7 @@
   <el-input
       class="panel"
       type="textarea"
-      :rows="4"
+      :rows="5"
       placeholder="压制代码"
       v-model="param[select]">
   </el-input>
@@ -48,8 +48,8 @@
       </span>
     </el-col>
     <el-col span="14">
-      <span style=";">
-        <div style="margin-top: 10px;margin-left: -10px;height: 40px">
+      <span style="">
+        <div style="margin-top: 10px;margin-left: -10px;height: 40px;font-size: 16px">
           111asdfasdfasdflajsl;dfkjal;sdkjfasdfasdfasdasdfasdfs
         </div>
       </span>
