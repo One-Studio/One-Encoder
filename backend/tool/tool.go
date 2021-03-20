@@ -16,7 +16,6 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
-	"syscall"
 )
 
 //打开文件和读内容 利用io/ioutil
@@ -234,7 +233,9 @@ func CmdRealtime(path string, arg string, method func(progress float64))  {
 	}
 
 	//隐藏黑框
-	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
+	if runtime.GOOS == "windows" {
+		//cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
+	}
 
 	stderr, _ := cmd.StderrPipe()
 	defer stderr.Close()
