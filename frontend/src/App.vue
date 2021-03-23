@@ -49,6 +49,9 @@ export default {
   mounted() {
     this.adaptScale()
     this.opacity = 1
+    window.onresize = () => {
+      this.adaptScale()
+    }
   },
   methods: {
     adaptScale () {

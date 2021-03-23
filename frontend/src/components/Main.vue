@@ -11,11 +11,22 @@
 
   <div class="panel">
      <span style="float: left">
-        <el-radio-group v-model="select"  size="small">
-          <el-radio-button :label=0>ffmpeg</el-radio-button>
-          <el-radio-button :label=1>x264</el-radio-button>
-          <el-radio-button :label=2>x265</el-radio-button>
-        </el-radio-group>
+<!--        <el-radio-group v-model="select"  size="small">-->
+<!--          <el-radio-button :label=0>ffmpeg</el-radio-button>-->
+<!--          <el-radio-button :label=1>x264</el-radio-button>-->
+<!--          <el-radio-button :label=2>x265</el-radio-button>-->
+<!--        </el-radio-group>-->
+        <a-radio-group size="small" v-model="select">
+          <a-radio-button value="ffmpeg" style="">
+            ffmpeg
+          </a-radio-button>
+          <a-radio-button value="x264" style="">
+            x264
+          </a-radio-button>
+          <a-radio-button value="x265" style="">
+            x265
+          </a-radio-button>
+        </a-radio-group>
       </span>
     <span style="float: right;margin-right: 0">
         <el-radio-group v-model="presetSelect"  size="small">
