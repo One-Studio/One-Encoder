@@ -1,58 +1,50 @@
 package config
 
 import (
-	"One-Encoder/backend/tool"
 	"bytes"
 	"encoding/json"
+	pls "github.com/One-Studio/ptools/pkg"
 	"os"
 )
 
 //读设置
-func ReadConfig(path string) (CFG, error) {
+func (c *CFG) ReadConfig(path string) error {
 	//检查文件是否存在
-	exist, err := tool.IsFileExisted(path)
-	if err != nil {
-		return CFG{}, err
-	} else if exist == true {
+	if exist:= pls.IsFileExisted(path); exist {
 		//存在则读取文件
-		content, err := tool.ReadAll(path)
+		content, err := pls.ReadAll(path)
 		if err != nil {
-			return CFG{}, err
+			return err
 		}
 
 		//初始化实例并解析JSON
 		var CFGInst CFG
 		err = json.Unmarshal([]byte(content), &CFGInst) //第二个参数要地址传递
 		if err != nil {
-			return CFG{}, err
+			return err
 		}
 
 		//检查现有设置，做一定语法上的修正，处理版本更新带来的设置选项的变化
-		CFGInst, err = checkConfig(CFGInst)
+		CFGInst, err = c.checkConfig(CFGInst)
 		if err != nil {
-			return CFG{}, err
+			return err
 		}
 
-		return CFGInst, nil
+		c.SetCFG(CFGInst)
+		return nil
 	} else {
 		//设置文件不存在则初始化
-		return defaultCFG, nil
+		c.SetDefCFG()
+		return nil
 	}
 }
 
 //写设置
-func SaveConfig(cfg CFG, path string) error {
+func (c *CFG) SaveConfig(path string) error {
 	//检查文件是否存在
-	exist, err := tool.IsFileExisted(path)
-	if err != nil {
-		//路径等错误，返回err
-		return err
-	} else if exist == true {
+	if exist := pls.IsFileExisted(path); exist {
 		//存在则删除文件
-		ok, err := tool.IsFileExisted(path)
-		if err != nil {
-			return err
-		} else if ok == true {
+		if ok := pls.IsFileExisted(path); ok {
 			err := os.Remove(path)
 			if err != nil {
 				return err
@@ -60,8 +52,8 @@ func SaveConfig(cfg CFG, path string) error {
 		}
 	}
 
-	JsonData, err := Config2Json(cfg)
-	err = tool.WriteFast(path, JsonData)
+	JsonData, err := c.CFG2Json()
+	err = pls.WriteFast(path, JsonData)
 	if err != nil {
 		return err
 	}
@@ -70,8 +62,8 @@ func SaveConfig(cfg CFG, path string) error {
 }
 
 //设置转Json字符串
-func Config2Json(cfg CFG) (string, error) {
-	JsonData, err := json.Marshal(cfg) //第二个参数要地址传递
+func (c *CFG) CFG2Json() (string, error) {
+	JsonData, err := json.Marshal(c) //第二个参数要地址传递
 	if err != nil {
 		return "", err
 	}
@@ -83,7 +75,7 @@ func Config2Json(cfg CFG) (string, error) {
 }
 
 //检查设置，更新覆盖部分设置
-func checkConfig(cfg CFG) (CFG, error) {
+func (c *CFG) checkConfig(cfg CFG) (CFG, error) {
 	//cfg.VersionCode = defaultCFG.VersionCode
 	//cfg.AppVersion = defaultCFG.AppVersion
 	//cfg.HlaeAPI = defaultCFG.HlaeAPI
@@ -92,4 +84,12 @@ func checkConfig(cfg CFG) (CFG, error) {
 	//cfg.FFmpegCdnAPI = defaultCFG.FFmpegCdnAPI
 
 	return cfg, nil
+}
+
+//设置CFG参数
+func (c *CFG) SetCFG(cfg CFG)  {
+	c.AppVersion = cfg.AppVersion
+	c.Output = cfg.Output
+	c.Input = cfg.Input
+	c.Init = cfg.Init
 }

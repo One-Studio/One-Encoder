@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/Masterminds/semver v1.5.0 // indirect
+	github.com/One-Studio/ptools v0.1.0 // indirect
 	github.com/fatih/color v1.10.0 // indirect
 	github.com/gen2brain/go-unarr v0.1.1
 	github.com/gorilla/websocket v1.4.2 // indirect
