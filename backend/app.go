@@ -3,6 +3,7 @@ package backend
 import (
 	"One-Encoder/backend/config"
 	"fmt"
+	pls "github.com/One-Studio/ptools/pkg"
 	"github.com/wailsapp/wails"
 	"log"
 )
@@ -40,12 +41,50 @@ func (a *App) WailsShutdown() {
 	}
 	return
 }
-//
-////设置前端变量
+
+//设置前端变量
 func (a *App) SetVar() {
 	//a.setAppVersion(a.cfg.AppVersion)
 	//a.setVersionCode(a.cfg.VersionCode)
 }
+
+//调用工具
+//Param: Input Output Param压制参数 Tool用哪个工具
+//Return: error
+func (a *App) Encode(input, output, param, tool string) error {
+	//Windows下检查pssuspend
+
+	//检查工具是否能正常使用
+
+	//工具 参数
+	var sig = make(chan rune)
+	var command string
+	switch tool {
+	case "ffmpeg":
+		command = a.cfg.FFmpeg.Path + " -i \"" + input + "\" " + param + " \"" + output + "\""
+	case "x264":
+		command = a.cfg.X264.Path + " \"" + input + "\" " + param + " -o \"" + output + "\""
+	case "x265":
+		command = a.cfg.X265.Path + " \"" + input + "\" " + param + " -o \"" + output + "\""
+	case "ffprobe":
+		command = a.cfg.FFprobe.Path + " -v quiet  -print_format json -show_format \"" + input + "\""
+	}
+
+	//接受暂停/终止信号量
+	go func() {
+		a.runtime.Events.On("RealtimeSignal", func(data ...interface{}) {
+			fmt.Println("收到信号:", data[0])
+		})
+	}()
+
+	err := pls.ExecRealtimeControl(command, func(line string) {
+		fmt.Println(line)
+	}, sig, "")
+
+	return err
+}
+
+
 
 func (a *App) SelectSrcPath() string {
 	return a.SelectFileTitle("选择输入路径")
@@ -63,7 +102,6 @@ func (a *App) ParseDragFiles() (string, error) {
 func (a *App) checkTools() {
 
 }
-
 
 func (a *App) StartEncoding(name string) error {
 	//t := a.cfg.Tools[name]
@@ -97,6 +135,7 @@ func (a *App) PauseEncoding() (string, error) {
 
 	return "", nil
 }
+
 func (a *App) QuitEncoding() (string, error) {
 
 	return "", nil

@@ -22,7 +22,6 @@ func (a *App) SetParam(name string, param string)  {
 	//fmt.Println("参数", name, param)
 }
 
-
 //测试发送信息
 func (a *App) SayHello() string {
 	fmt.Println("Hello to Backend!")
@@ -49,11 +48,6 @@ func (a *App) setVersionCode(versionCode string) {
 //设置App版本
 func (a *App) setAppVersion(appVersion string) {
 	a.runtime.Events.Emit("SetAppVersion", appVersion)
-}
-
-//选择hlae安装方式
-func (a *App) doSelectOption() {
-	a.runtime.Events.Emit("DoSelectOption")
 }
 
 //通知成功
