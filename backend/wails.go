@@ -8,14 +8,6 @@ import (
 ///// wails.go存放backend包对frontend细粒度交互的操作
 
 //设置go变量
-func (a *App) SetSrcPath(path string)  {
-	a.cfg.Input = path
-}
-
-func (a *App) SetDstPath(path string)  {
-	a.cfg.Output = path
-}
-
 func (a *App) SetParam(name string, param string)  {
 	//t := a.cfg.Tools[name]
 	//t.Param = param
@@ -68,7 +60,7 @@ func (a *App) noticeWarning(msg string) {
 //选择文件夹
 func (a *App) SelectDirectory() string {
 	directory := a.runtime.Dialog.SelectDirectory()
-	if ok := pls.IsFileExisted(directory); !ok {
+	if pls.IsFileExisted(directory) {
 		_ = pls.WriteFast("./cancel.txt", "取消安装")
 		a.noticeError("文件夹不存在或者未选择 ")
 		return ""
@@ -80,7 +72,7 @@ func (a *App) SelectDirectory() string {
 //选择文件
 func (a *App) SelectFile() string {
 	path := a.runtime.Dialog.SelectFile()
-	if ok := pls.IsFileExisted(path); !ok {
+	if pls.IsFileExisted(path) {
 		a.noticeError("文件不存在或者未选择 ")
 		return ""
 	}
@@ -91,7 +83,7 @@ func (a *App) SelectFile() string {
 //选择文件，有标题
 func (a *App) SelectFileTitle(Title string) string {
 	path := a.runtime.Dialog.SelectFile(Title)
-	if ok := pls.IsFileExisted(path); !ok {
+	if pls.IsFileExisted(path) {
 		a.noticeError("文件不存在或者未选择 ")
 		return ""
 	}
@@ -102,7 +94,18 @@ func (a *App) SelectFileTitle(Title string) string {
 //选择文件，有标题和过滤文件
 func (a *App) SelectFileTitleFilter(Title string, Filter string) string {
 	path := a.runtime.Dialog.SelectFile(Title, Filter)
-	if ok := pls.IsFileExisted(path); !ok {
+	if pls.IsFileExisted(path) {
+		a.noticeError("文件不存在或者未选择 ")
+		return ""
+	}
+
+	return path
+}
+
+//选择要保存的文件，有标题
+func (a *App) SelectSaveFileTitle(Title string) string {
+	path := a.runtime.Dialog.SelectSaveFile(Title)
+	if pls.IsFileExisted(path) {
 		a.noticeError("文件不存在或者未选择 ")
 		return ""
 	}

@@ -48,7 +48,9 @@ export default {
   },
   mounted() {
     this.adaptScale()
-    this.opacity = 1
+    setTimeout(()=>{
+      this.opacity = 1
+    }, 300)
     window.onresize = () => {
       this.adaptScale()
     }
@@ -74,7 +76,7 @@ export default {
 }
 
 .opacity-container {
-  transition: opacity 0.5s ease;
+  transition: opacity 0.3s ease;
 }
 
 .van-tabs__wrap {

@@ -8,8 +8,6 @@ import (
 /// 默认设置
 func (c *CFG) SetDefCFG()  {
 	c.AppVersion = "v0.1.0"
-	c.Output = ""
-	c.Input = ""
 	c.Init = false
 	c.X264Param = nil
 	c.X265Param = nil

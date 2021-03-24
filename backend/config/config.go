@@ -89,7 +89,5 @@ func (c *CFG) checkConfig(cfg CFG) (CFG, error) {
 //设置CFG参数
 func (c *CFG) SetCFG(cfg CFG)  {
 	c.AppVersion = cfg.AppVersion
-	c.Output = cfg.Output
-	c.Input = cfg.Input
 	c.Init = cfg.Init
 }

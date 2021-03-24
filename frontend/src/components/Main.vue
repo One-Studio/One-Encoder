@@ -1,35 +1,35 @@
 <template>
   <div>
-    <el-input class="panel" :span="24" placeholder="请选择文件" v-model="srcPath">
+    <el-input class="panel" :span="24" placeholder="请选择文件" v-model="input">
       <template slot="prepend">输入</template>
-      <el-button slot="append" icon="el-icon-folder"></el-button>
+      <el-button slot="append" icon="el-icon-folder"  @click="getInput"></el-button>
     </el-input>
-    <el-input class="panel" placeholder="请选择文件" v-model="dstPath">
+    <el-input class="panel" placeholder="请选择文件" v-model="output">
       <template slot="prepend">输出</template>
-      <el-button slot="append" icon="el-icon-folder"></el-button>
+      <el-button slot="append" icon="el-icon-folder" @click="getOutput"></el-button>
     </el-input>
 
   <div class="panel">
      <span style="float: left">
-<!--        <el-radio-group v-model="select"  size="small">-->
-<!--          <el-radio-button :label=0>ffmpeg</el-radio-button>-->
-<!--          <el-radio-button :label=1>x264</el-radio-button>-->
-<!--          <el-radio-button :label=2>x265</el-radio-button>-->
-<!--        </el-radio-group>-->
-        <a-radio-group size="small" v-model="select">
-          <a-radio-button value="ffmpeg" style="">
-            ffmpeg
-          </a-radio-button>
-          <a-radio-button value="x264" style="">
-            x264
-          </a-radio-button>
-          <a-radio-button value="x265" style="">
-            x265
-          </a-radio-button>
-        </a-radio-group>
+        <el-radio-group v-model="select"  size="small">
+          <el-radio-button label="ffmpeg">ffmpeg</el-radio-button>
+          <el-radio-button label="x264">x264</el-radio-button>
+          <el-radio-button label="x265">x265</el-radio-button>
+        </el-radio-group>
+<!--        <a-radio-group size="normal" v-model="select">-->
+<!--          <a-radio-button value="ffmpeg" style="">-->
+<!--            ffmpeg-->
+<!--          </a-radio-button>-->
+<!--          <a-radio-button value="x264" style="">-->
+<!--            x264-->
+<!--          </a-radio-button>-->
+<!--          <a-radio-button value="x265" style="">-->
+<!--            x265-->
+<!--          </a-radio-button>-->
+<!--        </a-radio-group>-->
       </span>
     <span style="float: right;margin-right: 0">
-        <el-radio-group v-model="presetSelect"  size="small">
+        <el-radio-group v-model="preset"  size="small">
           <el-radio-button :label=0>预设1</el-radio-button>
           <el-radio-button :label=1>预设2</el-radio-button>
           <el-radio-button :label=2>预设3</el-radio-button>
@@ -42,15 +42,15 @@
       type="textarea"
       :rows="5"
       placeholder="压制代码"
-      v-model="param[select]">
+      v-model="param[select][preset]">
   </el-input>
 
   <el-row class="panel"  type="flex">
-    <el-col span="2">
+    <el-col :span="2">
       <span style="float: left;margin: 9px;height: 40px;">
         <el-progress
             type="circle"
-            width="20"
+            :width="20"
             stroke-linecap="square"
             :text-inside="true"
             :stroke-width="2"
@@ -58,19 +58,19 @@
         ></el-progress>
       </span>
     </el-col>
-    <el-col span="14">
+    <el-col :span="14">
       <span style="">
         <div style="margin-top: 10px;margin-left: -10px;height: 40px;font-size: 16px">
           111asdfasdfasdflajsl;dfkjal;sdkjfasdfasdfasdasdfasdfs
         </div>
       </span>
     </el-col>
-    <el-col span="4">
+    <el-col :span="4">
       <span  style="float: right;margin-right: -16px">
         <el-button>暂停</el-button>
       </span>
     </el-col>
-    <el-col span="4">
+    <el-col :span="4">
       <span  style="float: right;margin-right: 0">
           <el-button>开始</el-button>
       </span>
@@ -89,15 +89,15 @@ export default {
   name: "Main",
   data() {
     return {
-      srcPath: 'C:/Users/Purp1e/Videos/测试.mp4',
-      dstPath: 'C:/Users/Purp1e/Desktop/测试One-Encoder.mp4',
-      param: [
-        '-vcodec libx264 -crf 20 -preset slow',
-        '',
-        ''
-      ],
-      select: 0,
-      presetSelect: 0,
+      input: 'C:/Users/Purp1e/Videos/测试.mp4',
+      output: 'C:/Users/Purp1e/Desktop/测试One-Encoder.mp4',
+      param: {
+        ffmpeg: ['-vcodec libx264 -crf 20 -preset slow', '', ''],
+        x264: ['', '', ''],
+        x265: ['', '', ''],
+      },
+      select: "ffmpeg",
+      preset: 0,
       // toolSelect: 0,
       // progress: 0,
       // status: false  //是否正在执行
@@ -134,7 +134,7 @@ export default {
       this.$message.warning(msg, 5);
     });
     // //通知传参
-    // window.backend.App.SetVar();
+    window.backend.App.SetupBackend();
     // //检查更新
     // this.checkUpdate();
   },
@@ -172,16 +172,28 @@ export default {
     //   window.backend.App.SetDstPath(this.dstPath)
     //   window.backend.App.SetParam(this.select, this.param[this.select])
     // },
-    // getSrcPath () {
-    //   window.backend.App.GetSrcPath().then(path => {
-    //       this.srcPath = path
-    //   });
-    // },
-    // getDistPath () {
-    //   window.backend.App.GetDistPath().then(path => {
-    //     this.dstPath = path
-    //   });
-    // },
+    getInput () {
+      window.backend.App.SelectFileTitle("选择输入文件").then(path => {
+        if ( path.length !== 0 ) {
+          this.input = path
+        }
+        //TODO 使用ffprobe获取输入文件参数
+
+        //根据输入检测并自动指定输出
+        window.backend.App.GenerateOutput(this.input).then(path => {
+          if ( path.length !== 0 ) {
+            this.output = path
+          }
+        })
+      });
+    },
+    getOutput () {
+      window.backend.App.SelectSaveFileTitle("选择输出文件").then(path => {
+        if ( path.length !== 0 ) {
+          this.output = path
+        }
+      });
+    },
     // onStart () {
     //   this.setVar()
     //   //debug

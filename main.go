@@ -8,10 +8,10 @@ import (
 )
 
 func main() {
-	w, h := 660, 380
+	w, h := 660, 376
 	//无边框窗口特性 wails v2.0之前解决固定窗口高度问题 TODO linux 高度测试
 	if runtime.GOOS == "darwin" {
-		h += 26
+		h += 30
 	}
 
 	//绑定js和css

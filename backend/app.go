@@ -6,6 +6,9 @@ import (
 	pls "github.com/One-Studio/ptools/pkg"
 	"github.com/wailsapp/wails"
 	"log"
+	"path/filepath"
+	"strconv"
+	"strings"
 )
 
 ///// app.go 存放backend包与frontend交互的大部分操作
@@ -23,7 +26,7 @@ func (a *App) WailsInit(runtime *wails.Runtime) error {
 	//初始化后：
 	var err error
 	if err = a.cfg.ReadConfig("./config.json"); err != nil {
-		a.runtime.Events.Emit("SetLog", err)	//TODO 这个时候页面还没有mounted 似乎会弹脚本错误
+		//a.runtime.Events.Emit("SetLog", err)	//TODO 这个时候页面还没有mounted 似乎会弹脚本错误
 		log.Println(err)
 		return err
 	}
@@ -42,10 +45,23 @@ func (a *App) WailsShutdown() {
 	return
 }
 
-//设置前端变量
-func (a *App) SetVar() {
+//设置后端 TODO
+func (a *App) SetupBackend() {
+
+
 	//a.setAppVersion(a.cfg.AppVersion)
 	//a.setVersionCode(a.cfg.VersionCode)
+}
+
+func (a *App) GenerateOutput(input string) (output string) {
+	ext := filepath.Ext(input)
+	noExt := strings.TrimSuffix(input, ext)
+	output = noExt + "_encode" + ext
+	for i := 1; pls.IsFileExisted(output); i++ {
+		output = noExt + "_encode(" + strconv.Itoa(i) + ")" + ext
+	}
+
+	return output
 }
 
 //调用工具
@@ -84,23 +100,9 @@ func (a *App) Encode(input, output, param, tool string) error {
 	return err
 }
 
-
-
-func (a *App) SelectSrcPath() string {
-	return a.SelectFileTitle("选择输入路径")
-}
-
-func (a *App) SelectDstPath() string {
-	return a.SelectFileTitle("选择输出路径")
-}
-
 func (a *App) ParseDragFiles() (string, error) {
 
 	return "", nil
-}
-
-func (a *App) checkTools() {
-
 }
 
 func (a *App) StartEncoding(name string) error {

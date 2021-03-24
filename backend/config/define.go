@@ -8,8 +8,6 @@ import (
 
 type CFG struct {
 	AppVersion   string   //当前App版本号
-	Input        string   //输入
-	Output       string   //输出
 	Init         bool     //是否已经初始化
 	FFmpeg       pls.Tool //ffmpeg工具
 	FFprobe      pls.Tool //ffprobe工具 ./ffprobe -v quiet  -print_format json -show_format C:\Users\Purp1e\Desktop\测试.mp4
