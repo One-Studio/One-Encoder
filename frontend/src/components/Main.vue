@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-input class="panel" :span="24" placeholder="请选择文件" v-model="input">
+    <el-input class="panel" :span="24" placeholder="请选择文件" v-model="input" @change="generateOutput">
       <template slot="prepend">输入</template>
       <el-button slot="append" icon="el-icon-folder"  @click="getInput"></el-button>
     </el-input>
@@ -11,7 +11,7 @@
 
   <div class="panel">
      <span style="float: left">
-        <el-radio-group v-model="select"  size="small">
+        <el-radio-group v-model="tool" size="small">
           <el-radio-button label="ffmpeg">ffmpeg</el-radio-button>
           <el-radio-button label="x264">x264</el-radio-button>
           <el-radio-button label="x265">x265</el-radio-button>
@@ -42,7 +42,7 @@
       type="textarea"
       :rows="5"
       placeholder="压制代码"
-      v-model="param[select][preset]">
+      v-model="param[tool][preset]">
   </el-input>
 
   <el-row class="panel"  type="flex">
@@ -61,18 +61,18 @@
     <el-col :span="14">
       <span style="">
         <div style="margin-top: 10px;margin-left: -10px;height: 40px;font-size: 16px">
-          111asdfasdfasdflajsl;dfkjal;sdkjfasdfasdfasdasdfasdfs
+          {{perLog}}
         </div>
       </span>
     </el-col>
     <el-col :span="4">
       <span  style="float: right;margin-right: -16px">
-        <el-button>暂停</el-button>
+        <el-button @click="pauseEncode">暂停</el-button>
       </span>
     </el-col>
     <el-col :span="4">
       <span  style="float: right;margin-right: 0">
-          <el-button>开始</el-button>
+        <el-button @click="encode">{{startOrQuit}}</el-button>
       </span>
     </el-col>
   </el-row>
@@ -89,15 +89,19 @@ export default {
   name: "Main",
   data() {
     return {
-      input: 'C:/Users/Purp1e/Videos/测试.mp4',
-      output: 'C:/Users/Purp1e/Desktop/测试One-Encoder.mp4',
+      input: '',
+      output: '',
       param: {
         ffmpeg: ['-vcodec libx264 -crf 20 -preset slow', '', ''],
         x264: ['', '', ''],
         x265: ['', '', ''],
       },
-      select: "ffmpeg",
+      tool: "ffmpeg",
       preset: 0,
+      perLog: "这里是单行日志信息",
+      progress: 0,
+      paused: false,
+      startOrQuit: "开始"
       // toolSelect: 0,
       // progress: 0,
       // status: false  //是否正在执行
@@ -121,13 +125,11 @@ export default {
     //   e.preventDefault();
     //   this.borderhover =  true
     // })
-    //设置后端，并返回数据给前端
-    window.backend.App.SetupBackend().then(data => {
-      //解析json TODO
-      console.log(data)
-    });
     Wails.Events.On("SetProgess", (progress) => {
       this.progress = progress;
+    });
+    Wails.Events.On("SetPerLog", (perLog) => {
+      this.perLog = perLog;
     });
     Wails.Events.On("NoticeSuccess", (msg) => {
       this.$message.success(msg, 5);
@@ -137,6 +139,12 @@ export default {
     });
     Wails.Events.On("NoticeWarning", (msg) => {
       this.$message.warning(msg, 5);
+    });
+    //通知传参
+    window.backend.App.SetupBackend().then(error => {
+      if (error !== "") {
+        this.$message.error(error)
+      }
     });
   },
   methods: {
@@ -180,12 +188,6 @@ export default {
         }
         //TODO 使用ffprobe获取输入文件参数
 
-        //根据输入检测并自动指定输出
-        window.backend.App.GenerateOutput(this.input).then(path => {
-          if ( path.length !== 0 ) {
-            this.output = path
-          }
-        })
       });
     },
     getOutput () {
@@ -194,6 +196,14 @@ export default {
           this.output = path
         }
       });
+    },
+    generateOutput () {
+      //根据输入检测并自动指定输出
+      window.backend.App.GenerateOutput(this.input).then(path => {
+        if ( path.length !== 0 ) {
+          this.output = path
+        }
+      })
     },
     // onStart () {
     //   this.setVar()
@@ -206,22 +216,27 @@ export default {
     //     this.QuitEncoding()
     //   }
     // },
-    // StartEncoding () {
-    //   this.status = true
-    //   window.backend.App.StartEncoding(this.select).then(() => {
-    //     this.status = false
-    //   });
-    // },
-    // PauseEncoding () {
-    //   window.backend.App.PauseEncoding().then(() => {
-    //
-    //   });
-    // },
-    // QuitEncoding () {
-    //   window.backend.App.QuitEncoding().then(() => {
-    //
-    //   });
-    // }
+    encode () {
+      if (this.startOrQuit === "开始") {
+        this.startOrQuit = "结束"
+        window.backend.App.StartEncode(this.input, this.output, this.param[this.tool][this.preset], this.tool).then((error) => {
+          if ( error !== null) {
+            this.$message.error(error, 5);
+          }
+          this.startOrQuit = "开始"
+          this.paused = false
+        });
+      } else {
+        Wails.Events.Emit("RealtimeSignal", 'q')
+      }
+    },
+    pauseEncode () {
+      if ( this.paused ) {
+        Wails.Events.Emit("RealtimeSignal", 'r')
+      } else {
+        Wails.Events.Emit("RealtimeSignal", 'p')
+      }
+    },
   }
 }
 </script>

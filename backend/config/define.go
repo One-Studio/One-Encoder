@@ -13,6 +13,7 @@ type CFG struct {
 	FFprobe      pls.Tool //ffprobe工具 ./ffprobe -v quiet  -print_format json -show_format C:\Users\Purp1e\Desktop\测试.mp4
 	X264         pls.Tool //x264工具
 	X265         pls.Tool //x265工具
+	Pssuspend	 pls.Tool //windows挂起进程所需工具
 	VapourSynth  pls.Tool //VS工具 TODO 考虑如何使用
 	FFmpegParam  []string //ffmpeg参数/预设
 	FFprobeParam []string //ffprobe参数/预设

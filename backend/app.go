@@ -3,12 +3,14 @@ package backend
 import (
 	"One-Encoder/backend/config"
 	"fmt"
-	pls "github.com/One-Studio/ptools/pkg"
-	"github.com/wailsapp/wails"
 	"log"
 	"path/filepath"
+	"runtime"
 	"strconv"
 	"strings"
+
+	pls "github.com/One-Studio/ptools/pkg"
+	"github.com/wailsapp/wails"
 )
 
 ///// app.go 存放backend包与frontend交互的大部分操作
@@ -47,7 +49,39 @@ func (a *App) WailsShutdown() {
 
 //设置后端 TODO
 func (a *App) SetupBackend() string {
+	if err := a.cfg.FFmpeg.Install(); err != nil {
+		return err.Error()
+	}
+	a.noticeSuccess("FFmpeg安装/更新成功！")
 
+	if err := a.cfg.FFprobe.Install(); err != nil {
+		return err.Error()
+	}
+	a.noticeSuccess("FFprobe安装/更新成功！")
+
+	if err := a.cfg.X264.Install(); err != nil {
+		return err.Error()
+	}
+	a.noticeSuccess("x264安装/更新成功！")
+
+	if err := a.cfg.X265.Install(); err != nil {
+		return err.Error()
+	}
+	a.noticeSuccess("x265安装/更新成功！")
+
+	if runtime.GOOS == "windows" {
+		if err := a.cfg.Pssuspend.Install(); err != nil {
+			return err.Error()
+		}
+		a.noticeSuccess("pssuspend成功！")
+	}
+
+	//if err := a.cfg.VapourSynth.Install(); err != nil {
+	//	return err.Error()
+	//}
+
+	a.cfg.Init = true
+	a.noticeSuccess("更新成功！")
 	return ""
 }
 
@@ -66,22 +100,37 @@ func (a *App) GenerateOutput(input string) (output string) {
 //调用工具
 //Param: Input Output Param压制参数 Tool用哪个工具
 //Return: error
-func (a *App) Encode(input, output, param, tool string) error {
+func (a *App) StartEncode(input, output, param, tool string) string {
 	//Windows下检查pssuspend
-
-	//检查工具是否能正常使用
+	if runtime.GOOS == "windows" {
+		if !a.cfg.Pssuspend.CheckExist() {
+			a.noticeWarning("Pssuspend未正确安装，无法暂停压制")
+		}
+	}
 
 	//工具 参数
 	var sig = make(chan rune)
 	var command string
 	switch tool {
 	case "ffmpeg":
+		if !a.cfg.FFmpeg.CheckExist() {
+			return "ffmpeg工具未正确安装"
+		}
 		command = a.cfg.FFmpeg.Path + " -i \"" + input + "\" " + param + " \"" + output + "\""
 	case "x264":
+		if !a.cfg.X264.CheckExist() {
+			return "x264工具未正确安装"
+		}
 		command = a.cfg.X264.Path + " \"" + input + "\" " + param + " -o \"" + output + "\""
 	case "x265":
+		if !a.cfg.X265.CheckExist() {
+			return "x265工具未正确安装"
+		}
 		command = a.cfg.X265.Path + " \"" + input + "\" " + param + " -o \"" + output + "\""
 	case "ffprobe":
+		if !a.cfg.FFprobe.CheckExist() {
+			return "ffprobe工具未正确安装"
+		}
 		command = a.cfg.FFprobe.Path + " -v quiet  -print_format json -show_format \"" + input + "\""
 	}
 
@@ -89,14 +138,19 @@ func (a *App) Encode(input, output, param, tool string) error {
 	go func() {
 		a.runtime.Events.On("RealtimeSignal", func(data ...interface{}) {
 			fmt.Println("收到信号:", data[0])
+			sig <- data[0].(rune)
 		})
 	}()
 
 	err := pls.ExecRealtimeControl(command, func(line string) {
-		fmt.Println(line)
-	}, sig, "")
+		a.setProgress(66.57)
+		a.setPerLog(line)
+	}, sig, a.cfg.Pssuspend.Path)
+	if err != nil {
+		return err.Error()
+	}
 
-	return err
+	return ""
 }
 
 func (a *App) ParseDragFiles() (string, error) {

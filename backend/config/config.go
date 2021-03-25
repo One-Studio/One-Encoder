@@ -24,11 +24,11 @@ func (c *CFG) ReadConfig(path string) error {
 			return err
 		}
 
-		//检查现有设置，做一定语法上的修正，处理版本更新带来的设置选项的变化
-		CFGInst, err = c.checkConfig(CFGInst)
-		if err != nil {
-			return err
-		}
+		//检查现有设置，做一定语法上的修正，处理版本更新带来的设置选项的变化 TODO
+		//CFGInst, err = c.checkConfig(CFGInst)
+		//if err != nil {
+		//	return err
+		//}
 
 		c.SetCFG(CFGInst)
 		return nil
@@ -76,12 +76,7 @@ func (c *CFG) CFG2Json() (string, error) {
 
 //检查设置，更新覆盖部分设置
 func (c *CFG) checkConfig(cfg CFG) (CFG, error) {
-	//cfg.VersionCode = defaultCFG.VersionCode
 	//cfg.AppVersion = defaultCFG.AppVersion
-	//cfg.HlaeAPI = defaultCFG.HlaeAPI
-	//cfg.HlaeCdnAPI = defaultCFG.HlaeCdnAPI
-	//cfg.FFmpegAPI = defaultCFG.FFmpegAPI
-	//cfg.FFmpegCdnAPI = defaultCFG.FFmpegCdnAPI
 
 	return cfg, nil
 }

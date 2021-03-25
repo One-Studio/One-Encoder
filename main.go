@@ -11,7 +11,7 @@ func main() {
 	w, h := 660, 376
 	//无边框窗口特性 wails v2.0之前解决固定窗口高度问题 TODO linux 高度测试
 	if runtime.GOOS == "darwin" {
-		h += 30
+		h += 28
 	}
 
 	//绑定js和css
@@ -25,7 +25,7 @@ func main() {
 		Title:     "One Encoder",
 		JS:        js,
 		CSS:       css,
-		Colour:    "#eaeaea",
+		Colour:    "#FEFEFE",
 		Resizable: false,
 	})
 

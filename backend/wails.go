@@ -22,6 +22,11 @@ func (a *App) SayHello() string {
 	return "Hello to Frontend!"
 }
 
+func (a *App) Test(str1, str2, str3 string) (result string) {
+	result = "Backend has got:\nstr1 = " + str1 + "\nstr2 = " + str2 + "\nstr3 = " + str3
+	return
+}
+
 //设置进度条
 func (a *App) setProgress(progress float64) {
 	a.runtime.Events.Emit("SetProgess", progress)
@@ -30,6 +35,11 @@ func (a *App) setProgress(progress float64) {
 //设置日志信息
 func (a *App) setLog(log string) {
 	a.runtime.Events.Emit("SetLog", log)
+}
+
+//设置单行日志
+func (a *App) setPerLog(log string) {
+	a.runtime.Events.Emit("SetPerLog", log)
 }
 
 //设置版本代号
@@ -60,7 +70,7 @@ func (a *App) noticeWarning(msg string) {
 //选择文件夹
 func (a *App) SelectDirectory() string {
 	directory := a.runtime.Dialog.SelectDirectory()
-	if pls.IsFileExisted(directory) {
+	if !pls.IsFileExisted(directory) {
 		_ = pls.WriteFast("./cancel.txt", "取消安装")
 		a.noticeError("文件夹不存在或者未选择 ")
 		return ""
@@ -72,7 +82,7 @@ func (a *App) SelectDirectory() string {
 //选择文件
 func (a *App) SelectFile() string {
 	path := a.runtime.Dialog.SelectFile()
-	if pls.IsFileExisted(path) {
+	if !pls.IsFileExisted(path) {
 		a.noticeError("文件不存在或者未选择 ")
 		return ""
 	}
@@ -83,7 +93,7 @@ func (a *App) SelectFile() string {
 //选择文件，有标题
 func (a *App) SelectFileTitle(Title string) string {
 	path := a.runtime.Dialog.SelectFile(Title)
-	if pls.IsFileExisted(path) {
+	if !pls.IsFileExisted(path) {
 		a.noticeError("文件不存在或者未选择 ")
 		return ""
 	}
@@ -94,7 +104,7 @@ func (a *App) SelectFileTitle(Title string) string {
 //选择文件，有标题和过滤文件
 func (a *App) SelectFileTitleFilter(Title string, Filter string) string {
 	path := a.runtime.Dialog.SelectFile(Title, Filter)
-	if pls.IsFileExisted(path) {
+	if !pls.IsFileExisted(path) {
 		a.noticeError("文件不存在或者未选择 ")
 		return ""
 	}
@@ -105,10 +115,6 @@ func (a *App) SelectFileTitleFilter(Title string, Filter string) string {
 //选择要保存的文件，有标题
 func (a *App) SelectSaveFileTitle(Title string) string {
 	path := a.runtime.Dialog.SelectSaveFile(Title)
-	if pls.IsFileExisted(path) {
-		a.noticeError("文件不存在或者未选择 ")
-		return ""
-	}
 
 	return path
 }
