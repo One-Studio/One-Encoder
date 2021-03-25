@@ -121,22 +121,23 @@ export default {
     //   e.preventDefault();
     //   this.borderhover =  true
     // })
-    // Wails.Events.On("SetProgess", (progress) => {
-    //   this.progress = progress;
-    // });
-    // Wails.Events.On("NoticeSuccess", (msg) => {
-    //   this.$message.success(msg, 5);
-    // });
-    // Wails.Events.On("NoticeError", (msg) => {
-    //   this.$message.error(msg, 5);
-    // });
+    //设置后端，并返回数据给前端
+    window.backend.App.SetupBackend().then(data => {
+      //解析json TODO
+      console.log(data)
+    });
+    Wails.Events.On("SetProgess", (progress) => {
+      this.progress = progress;
+    });
+    Wails.Events.On("NoticeSuccess", (msg) => {
+      this.$message.success(msg, 5);
+    });
+    Wails.Events.On("NoticeError", (msg) => {
+      this.$message.error(msg, 5);
+    });
     Wails.Events.On("NoticeWarning", (msg) => {
       this.$message.warning(msg, 5);
     });
-    // //通知传参
-    window.backend.App.SetupBackend();
-    // //检查更新
-    // this.checkUpdate();
   },
   methods: {
     // eventDrop: function(e){

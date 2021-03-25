@@ -31,5 +31,5 @@ func main() {
 
 	//绑定后端&运行
 	app.Bind(&backend.App{})
-	app.Run()
+	_ = app.Run()
 }

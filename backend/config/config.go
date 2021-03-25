@@ -10,7 +10,7 @@ import (
 //读设置
 func (c *CFG) ReadConfig(path string) error {
 	//检查文件是否存在
-	if exist:= pls.IsFileExisted(path); exist {
+	if exist := pls.IsFileExisted(path); exist {
 		//存在则读取文件
 		content, err := pls.ReadAll(path)
 		if err != nil {
@@ -87,7 +87,17 @@ func (c *CFG) checkConfig(cfg CFG) (CFG, error) {
 }
 
 //设置CFG参数
-func (c *CFG) SetCFG(cfg CFG)  {
+func (c *CFG) SetCFG(cfg CFG) {
 	c.AppVersion = cfg.AppVersion
 	c.Init = cfg.Init
+	c.FFmpeg = cfg.FFmpeg
+	c.FFprobe = cfg.FFprobe
+	c.X264 = cfg.X264
+	c.X265 = cfg.X265
+	c.VapourSynth = cfg.VapourSynth
+	c.FFmpegParam = cfg.FFmpegParam
+	c.FFprobeParam = cfg.FFprobeParam
+	c.X264Param = cfg.X264Param
+	c.X265Param = cfg.X265Param
+	c.Current = cfg.Current
 }

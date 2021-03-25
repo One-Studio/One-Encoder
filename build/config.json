@@ -1,7 +1,5 @@
 {
     "AppVersion": "v0.1.0",
-    "Input": "",
-    "Output": "",
     "Init": false,
     "FFmpeg": {
         "Name": "",

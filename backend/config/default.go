@@ -18,6 +18,9 @@ func (c *CFG) SetDefCFG()  {
 		c.FFmpeg = pls.Tool{
 
 		}
+		c.FFprobe = pls.Tool{
+
+		}
 		c.X264 = pls.Tool{
 
 		}
@@ -29,6 +32,9 @@ func (c *CFG) SetDefCFG()  {
 		c.FFmpeg = pls.Tool{
 
 		}
+		c.FFprobe = pls.Tool{
+
+		}
 		c.X264 = pls.Tool{
 
 		}
@@ -38,6 +44,9 @@ func (c *CFG) SetDefCFG()  {
 	default:
 		//linux等其他系统下参数
 		c.FFmpeg = pls.Tool{
+
+		}
+		c.FFprobe = pls.Tool{
 
 		}
 		c.X264 = pls.Tool{

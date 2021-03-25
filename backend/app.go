@@ -46,13 +46,12 @@ func (a *App) WailsShutdown() {
 }
 
 //设置后端 TODO
-func (a *App) SetupBackend() {
+func (a *App) SetupBackend() string {
 
-
-	//a.setAppVersion(a.cfg.AppVersion)
-	//a.setVersionCode(a.cfg.VersionCode)
+	return ""
 }
 
+//根据输入路径自动得出输出路径
 func (a *App) GenerateOutput(input string) (output string) {
 	ext := filepath.Ext(input)
 	noExt := strings.TrimSuffix(input, ext)
@@ -86,7 +85,7 @@ func (a *App) Encode(input, output, param, tool string) error {
 		command = a.cfg.FFprobe.Path + " -v quiet  -print_format json -show_format \"" + input + "\""
 	}
 
-	//接受暂停/终止信号量
+	//接受暂停/终止信号量 TODO debug
 	go func() {
 		a.runtime.Events.On("RealtimeSignal", func(data ...interface{}) {
 			fmt.Println("收到信号:", data[0])
