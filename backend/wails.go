@@ -22,6 +22,11 @@ func (a *App) SayHello() string {
 	return "Hello to Frontend!"
 }
 
+func (a *App) Test(str1, str2, str3 string) (result string) {
+	result = "Backend has got:\nstr1 = " + str1 + "\nstr2 = " + str2 + "\nstr3 = " + str3
+	return
+}
+
 //设置进度条
 func (a *App) setProgress(progress float64) {
 	a.runtime.Events.Emit("SetProgess", progress)
@@ -30,6 +35,11 @@ func (a *App) setProgress(progress float64) {
 //设置日志信息
 func (a *App) setLog(log string) {
 	a.runtime.Events.Emit("SetLog", log)
+}
+
+//设置单行日志
+func (a *App) setPerLog(log string) {
+	a.runtime.Events.Emit("SetPerLog", log)
 }
 
 //设置版本代号
