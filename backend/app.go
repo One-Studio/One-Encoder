@@ -54,10 +54,10 @@ func (a *App) SetupBackend() string {
 	}
 	a.noticeSuccess("FFmpeg安装/更新成功！")
 
-	if err := a.cfg.FFprobe.Install(); err != nil {
-		return err.Error()
-	}
-	a.noticeSuccess("FFprobe安装/更新成功！")
+	//if err := a.cfg.FFprobe.Install(); err != nil {
+	//	return err.Error()
+	//}
+	//a.noticeSuccess("FFprobe安装/更新成功！")
 
 	if err := a.cfg.X264.Install(); err != nil {
 		return err.Error()
@@ -131,7 +131,7 @@ func (a *App) StartEncode(input, output, param, tool string) string {
 		if !a.cfg.FFprobe.CheckExist() {
 			return "ffprobe工具未正确安装"
 		}
-		command = a.cfg.FFprobe.Path + " -v quiet  -print_format json -show_format \"" + input + "\""
+		command = a.cfg.FFprobe.Path + " -v quiet -print_format json -show_format \"" + input + "\""
 	}
 
 	//接受暂停/终止信号量 TODO debug
@@ -142,6 +142,7 @@ func (a *App) StartEncode(input, output, param, tool string) string {
 		})
 	}()
 
+	a.noticeWarning(command)
 	err := pls.ExecRealtimeControl(command, func(line string) {
 		a.setProgress(66.57)
 		a.setPerLog(line)

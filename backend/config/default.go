@@ -17,7 +17,7 @@ func (c *CFG) SetDefCFG()  {
 		//windows下参数
 		c.FFmpeg = pls.Tool{
 			Name: "ffmpeg",
-			Path: "./tools/ffmpeg.exe",
+			Path: ".\\tools\\ffmpeg.exe",
 			TakeOver: true,
 			VersionApi: "https://www.gyan.dev/ffmpeg/builds/release-version",
 			VersionApiCDN: "https://cdn.jsdelivr.net/gh/One-Studio/FFmpeg-Win64@master/version",
@@ -30,7 +30,7 @@ func (c *CFG) SetDefCFG()  {
 		}
 		c.FFprobe = pls.Tool{
 			Name: "ffprobe",
-			Path: "./tools/ffprobe.exe",
+			Path: ".\\tools\\ffprobe.exe",
 			TakeOver: true,
 			VersionApi: "https://www.gyan.dev/ffmpeg/builds/release-version",
 			VersionApiCDN: "",
@@ -40,12 +40,9 @@ func (c *CFG) SetDefCFG()  {
 			IsCLI: true,
 			Fetch: "ffprobe.exe",
 		}
-		c.FFprobe = pls.Tool{
-
-		}
 		c.X264 = pls.Tool{
 			Name: "x264",
-			Path: "./tools/x264.exe",
+			Path: ".\\tools\\x264.exe",
 			TakeOver: true,
 			VersionApi: "",
 			VersionApiCDN: "https://cdn.jsdelivr.net/gh/One-Studio/x264-t_mod-posix@master/version",
@@ -58,7 +55,7 @@ func (c *CFG) SetDefCFG()  {
 		}
 		c.X265 = pls.Tool{
 			Name: "x265",
-			Path: "./tools/x265.exe",
+			Path: ".\\tools\\x265.exe",
 			TakeOver: true,
 			VersionApi: "",
 			VersionApiCDN: "https://cdn.jsdelivr.net/gh/One-Studio/x265-Yuuki@master/version",
@@ -70,7 +67,7 @@ func (c *CFG) SetDefCFG()  {
 		}
 		c.Pssuspend = pls.Tool{
 			Name: "pssuspend",
-			Path: "./tools/pssuspend.exe",
+			Path: ".\\tools\\pssuspend.exe",
 			TakeOver: false,
 			VersionApi: "",
 			VersionApiCDN: "",
@@ -144,6 +141,12 @@ func (c *CFG) SetDefCFG()  {
 			IsCLI: true,
 			Fetch: "x265",
 		}
+		c.Pssuspend = pls.Tool{
+			Name: "pssuspend",
+			Path: "./tools/pssuspend.exe",
+			TakeOver: false,
+			IsCLI: true,
+		}
 	default:
 		//linux等其他系统下参数
 		c.FFmpeg = pls.Tool{
@@ -169,9 +172,6 @@ func (c *CFG) SetDefCFG()  {
 			IsGitHub: false,
 			IsCLI: true,
 			Fetch: "ffprobe",
-		}
-		c.FFprobe = pls.Tool{
-
 		}
 		c.X264 = pls.Tool{
 			Name: "x264",

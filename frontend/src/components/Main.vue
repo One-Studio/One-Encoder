@@ -60,7 +60,7 @@
     </el-col>
     <el-col :span="14">
       <span style="">
-        <div style="margin-top: 10px;margin-left: -10px;height: 40px;font-size: 16px">
+        <div style="margin-top: 8px;margin-left: -10px;height: 40px;font-size: 12px">
           {{perLog}}
         </div>
       </span>
@@ -188,6 +188,7 @@ export default {
         }
         //TODO 使用ffprobe获取输入文件参数
 
+        this.generateOutput()
       });
     },
     getOutput () {
