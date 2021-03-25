@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-input class="panel" :span="24" placeholder="请选择文件" v-model="input">
+    <el-input class="panel" :span="24" placeholder="请选择文件" v-model="input" @change="generateOutput">
       <template slot="prepend">输入</template>
       <el-button slot="append" icon="el-icon-folder"  @click="getInput"></el-button>
     </el-input>
@@ -188,12 +188,6 @@ export default {
         }
         //TODO 使用ffprobe获取输入文件参数
 
-        //根据输入检测并自动指定输出
-        window.backend.App.GenerateOutput(this.input).then(path => {
-          if ( path.length !== 0 ) {
-            this.output = path
-          }
-        })
       });
     },
     getOutput () {
@@ -202,6 +196,14 @@ export default {
           this.output = path
         }
       });
+    },
+    generateOutput () {
+      //根据输入检测并自动指定输出
+      window.backend.App.GenerateOutput(this.input).then(path => {
+        if ( path.length !== 0 ) {
+          this.output = path
+        }
+      })
     },
     // onStart () {
     //   this.setVar()
