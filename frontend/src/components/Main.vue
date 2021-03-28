@@ -1,57 +1,60 @@
 <template>
-	<div>
+	<div style="padding: 0 10px">
 		<a-input
 			class="panel"
-			placeholder="请选择文件"
+			:placeholder="this.input"
 			size="large"
-			@click="getInput"
 		>
-			<a-icon slot="addonAfter" type="folder" />
+			<a-icon slot="addonAfter" @click="getInput" type="folder"/>
 			<template slot="addonBefore">输入</template>
 		</a-input>
+		<input type="file" name="filename" id="open" style="display:none"/>
 		<a-input
 			class="panel"
 			placeholder="请选择文件"
 			size="large"
-			@click="getOutput"
 		>
-			<a-icon slot="addonAfter" type="folder" />
+			<a-icon slot="addonAfter" @click="getOutput" type="folder"/>
 			<template slot="addonBefore">输出</template>
 		</a-input>
 
-	<div class="panel">
-		<a-row type="flex" justify="space-between">
-			<a-radio-group button-style="solid" v-model="tool">
-				<a-radio-button label="ffmpeg">ffmpeg</a-radio-button>
-				<a-radio-button label="x264">x264</a-radio-button>
-				<a-radio-button label="x265">x265</a-radio-button>
-			</a-radio-group>
-			<a-radio-group button-style="solid" v-model="preset">
-				<a-radio-button :label="0">预设1</a-radio-button>
-				<a-radio-button :label="1">预设2</a-radio-button>
-				<a-radio-button :label="2">预设3</a-radio-button>
-			</a-radio-group>
+		<div class="panel">
+			<a-row type="flex" justify="space-between">
+				<a-radio-group button-style="solid" v-model="tool">
+					<a-radio-button label="ffmpeg">ffmpeg</a-radio-button>
+					<a-radio-button label="x264">x264</a-radio-button>
+					<a-radio-button label="x265">x265</a-radio-button>
+				</a-radio-group>
+				<a-radio-group button-style="solid" v-model="preset">
+					<a-radio-button :label="0">预设1</a-radio-button>
+					<a-radio-button :label="1">预设2</a-radio-button>
+					<a-radio-button :label="2">预设3</a-radio-button>
+				</a-radio-group>
+			</a-row>
+		</div>
+		<a-input class="panel" type="textarea" :rows="5" placeholder="压制代码" v-model="param[tool][preset]"></a-input>
+		<a-row type="flex" justify="space-between" align="middle" class="panel" style="margin-top: 20px;">
+			<a-col :span="16">
+				<a-row type="flex" justify="space-between" align="middle">
+					<a-col :span="3">
+						<a-progress type="circle" :showInfo="this.progressDisplayNum" :percent="75" :width="30"/>
+					</a-col>
+					<a-col :span="2">
+						{{ progress }}
+					</a-col>
+					<a-col :span="19">
+						{{ perLog }}
+					</a-col>
+				</a-row>
+			</a-col>
+			<a-col :span="8">
+				<a-row type="flex" justify="end">
+					<a-button size="large" @click="pauseEncode">暂停</a-button>
+					<a-button size="large" @click="encode" style="margin-left: 10px; width: 100px" :type="this.progressFinished ? '':'danger'">{{ startOrQuit }}
+					</a-button>
+				</a-row>
+			</a-col>
 		</a-row>
-	</div>
-	<a-input class="panel" type="textarea" :rows="5" placeholder="压制代码" v-model="param[tool][preset]"></a-input>
-	<a-row type="flex" justify="space-between" align="middle" class="panel" style="margin-top: 20px;">
-		<a-col :span="16">
-			<a-row type="flex" justify="space-between" align="middle">
-				<a-col :span="4">
-					<a-progress type="circle" :percent="100" :width="30" />
-				</a-col>
-				<a-col :span="20">
-					{{ perLog }}
-				</a-col>
-			</a-row>
-		</a-col>
-		<a-col :span="8">
-			<a-row type="flex" justify="end">
-				<a-button @click="pauseEncode">暂停</a-button>
-				<a-button @click="encode" style="margin-left: 10px">{{ startOrQuit }}</a-button>
-			</a-row>
-		</a-col>
-	</a-row>
 		<!--    <br>压制代码档位-->
 		<!--    <br>信息-->
 	</div>
@@ -81,6 +84,8 @@ export default {
 			// toolSelect: 0,
 			// progress: 0,
 			// status: false  //是否正在执行
+			progressFinished: true,
+			progressDisplayNum: false
 		}
 	},
 	mounted() {
@@ -158,6 +163,8 @@ export default {
 		//   window.backend.App.SetParam(this.select, this.param[this.select])
 		// },
 		getInput() {
+			document.getElementById('open').click()
+			console.log('document.getElementById(\'open\').files', document.getElementById('open').files)
 			window.backend.App.SelectFileTitle('选择输入文件').then((path) => {
 				if (path.length !== 0) {
 					this.input = path
@@ -207,6 +214,7 @@ export default {
 					}
 					this.startOrQuit = '开始'
 					this.paused = false
+					this.progressFinished = false
 				})
 			} else {
 				Wails.Events.Emit('RealtimeSignal', 'q')
