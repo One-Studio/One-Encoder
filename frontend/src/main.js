@@ -14,6 +14,10 @@ Vue.use(Vant);
 Vue.use(ElementUI);
 Vue.use(Antd);
 
+// i18n
+import VueI18n from 'vue-i18n';
+Vue.use(VueI18n);
+
 Vue.config.productionTip = false;
 Vue.config.devtools = true;
 

@@ -69,6 +69,23 @@
         "NonKeyWords": null,
         "Fetch": ""
     },
+    "Pssuspend": {
+        "Name": "",
+        "Path": "",
+        "TakeOver": false,
+        "Version": "",
+        "VersionApi": "",
+        "VersionApiCDN": "",
+        "DownloadLink": "",
+        "DownloadLinkCDN": "",
+        "VersionRegExp": "",
+        "GithubRepo": "",
+        "IsGitHub": false,
+        "IsCLI": false,
+        "KeyWords": null,
+        "NonKeyWords": null,
+        "Fetch": ""
+    },
     "VapourSynth": {
         "Name": "",
         "Path": "",
