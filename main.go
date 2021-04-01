@@ -8,10 +8,12 @@ import (
 )
 
 func main() {
-	w, h := 660, 376
+	//TODO 启动前读取CFG，包括w, h, scale
+
+	w, h := 660, 408-12
 	//无边框窗口特性 wails v2.0之前解决固定窗口高度问题 TODO linux 高度测试
 	if runtime.GOOS == "darwin" {
-		h += 28
+		//h += 28
 	}
 
 	//绑定js和css

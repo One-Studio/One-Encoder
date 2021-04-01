@@ -19,6 +19,7 @@ import (
 type App struct {
 	runtime *wails.Runtime //初始化Runtime需要
 	cfg     config.CFG
+	sig     chan rune //控制压制暂停/继续/结束的channel
 	//zoom
 }
 
@@ -49,32 +50,32 @@ func (a *App) WailsShutdown() {
 
 //设置后端 TODO
 func (a *App) SetupBackend() string {
-	if err := a.cfg.FFmpeg.Install(); err != nil {
-		return err.Error()
-	}
-	a.noticeSuccess("FFmpeg安装/更新成功！")
+	//if err := a.cfg.FFmpeg.Install(); err != nil {
+	//	return err.Error()
+	//}
+	//a.noticeSuccess("FFmpeg安装/更新成功！")
 
 	//if err := a.cfg.FFprobe.Install(); err != nil {
 	//	return err.Error()
 	//}
 	//a.noticeSuccess("FFprobe安装/更新成功！")
 
-	if err := a.cfg.X264.Install(); err != nil {
-		return err.Error()
-	}
-	a.noticeSuccess("x264安装/更新成功！")
-
-	if err := a.cfg.X265.Install(); err != nil {
-		return err.Error()
-	}
-	a.noticeSuccess("x265安装/更新成功！")
-
-	if runtime.GOOS == "windows" {
-		if err := a.cfg.Pssuspend.Install(); err != nil {
-			return err.Error()
-		}
-		a.noticeSuccess("pssuspend成功！")
-	}
+	//if err := a.cfg.X264.Install(); err != nil {
+	//	return err.Error()
+	//}
+	//a.noticeSuccess("x264安装/更新成功！")
+	//
+	//if err := a.cfg.X265.Install(); err != nil {
+	//	return err.Error()
+	//}
+	//a.noticeSuccess("x265安装/更新成功！")
+	//
+	//if runtime.GOOS == "windows" {
+	//	if err := a.cfg.Pssuspend.Install(); err != nil {
+	//		return err.Error()
+	//	}
+	//	a.noticeSuccess("pssuspend成功！")
+	//}
 
 	//if err := a.cfg.VapourSynth.Install(); err != nil {
 	//	return err.Error()

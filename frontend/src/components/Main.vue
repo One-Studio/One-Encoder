@@ -1,57 +1,63 @@
 <template>
-	<div style="padding: 0 10px">
+	<div class="ant-tabs-adjust">
+<!--    <a-button @click="getInput"></a-button>-->
 		<a-input-search
-			class="panel"
-      allow-clear
+			class="panel" allow-clear
       addon-before="输入"
 			placeholder="请选择输入"
 			size="large"
+      v-model="input"
+      @search="getInput"
 		>
-      <a-button slot="enterButton" @click="getInput">
+      <a-button slot="enterButton">
         <a-icon type="folder"/>
       </a-button>
 		</a-input-search>
 		<input type="file" name="filename" id="open" style="display:none"/>
 		<a-input-search
-			class="panel"
-      allow-clear
+			class="panel" allow-clear
       addon-before="输出"
 			placeholder="请选择输出"
 			size="large"
+      v-model="output"
+      @search="getOutput"
 		>
-      <a-button slot="enterButton" @click="getOutput">
+      <a-button slot="enterButton">
         <a-icon type="folder"/>
       </a-button>
 		</a-input-search>
 
 		<div class="panel">
 			<a-row type="flex" justify="space-between">
-				<a-radio-group button-style="solid" size="large" v-model="tool" default-value="ffmpeg">
-					<a-radio-button label="ffmpeg">ffmpeg</a-radio-button>
-					<a-radio-button label="x264">x264</a-radio-button>
-					<a-radio-button label="x265">x265</a-radio-button>
+				<a-radio-group button-style="outline" size="large"  v-model="tool">
+					<a-radio-button value="ffmpeg">ffmpeg</a-radio-button>
+					<a-radio-button value="x264">x264</a-radio-button>
+					<a-radio-button value="x265">x265</a-radio-button>
 				</a-radio-group>
-				<a-radio-group button-style="solid" size="large" v-model="preset" :default-value=0>
-					<a-radio-button :label=0>预设1</a-radio-button>
-					<a-radio-button :label=1>预设2</a-radio-button>
-					<a-radio-button :label=2>预设3</a-radio-button>
+				<a-radio-group button-style="outline" size="large" v-model="preset">
+					<a-radio-button value="0">预设1</a-radio-button>
+					<a-radio-button value="1">预设2</a-radio-button>
+					<a-radio-button value="2">预设3</a-radio-button>
 				</a-radio-group>
 			</a-row>
 		</div>
     <div class="panel">
-      <a-input type="textarea" :autoSize="{ minRows: 5, maxRows: 5 }" placeholder="压制代码" v-model="param[tool][preset]"></a-input>
+      <a-input type="textarea" :autoSize="{ minRows: 5, maxRows: 5 }"
+               placeholder="压制代码" v-model="param[tool][preset]"
+               style="font-size: 16px"
+      ></a-input>
     </div>
     <div class="panel">
       <a-row type="flex" justify="space-between" align="middle">
         <a-col :span="16">
-          <a-row type="flex" justify="space-between" align="middle">
+          <a-row type="flex" justify="space-between" align="middle" class="font-color-overwrite">
             <a-col :span="2">
               <a-progress type="circle" :showInfo="this.progressDisplayNum" :percent="progress" :width="26"/>
             </a-col>
-            <a-col :span="3">
+            <a-col :span="3" style="margin-left: -4px">
               {{ progress }}%
             </a-col>
-            <a-col :span="19" style="padding-left: 2px;">
+            <a-col :span="19" >
               {{ perLog }}
             </a-col>
           </a-row>
@@ -79,12 +85,12 @@ export default {
 			input: '',
 			output: '',
 			param: {
-				ffmpeg: ['-vcodec libx264 -crf 20 -preset slow', 'test', ''],
-				x264: ['', '', ''],
+				ffmpeg: ['-vcodec libx264 -crf 20 -preset slow', '-c:v prores', ''],
+				x264: ['--crf 20 --preset slow', '', ''],
 				x265: ['', '', ''],
 			},
 			tool: 'ffmpeg',
-			preset: 0,
+			preset: '0',
 			perLog: '这里是单行日志信息',
 			progress: 66.57,
 			paused: false,
@@ -171,8 +177,9 @@ export default {
 		//   window.backend.App.SetParam(this.select, this.param[this.select])
 		// },
 		getInput() {
-			document.getElementById('open').click()
-			console.log('document.getElementById(\'open\').files', document.getElementById('open').files)
+      // console.log("选择输入文件debug")
+			// document.getElementById('open').click()
+			// console.log('document.getElementById(\'open\').files', document.getElementById('open').files)
 			window.backend.App.SelectFileTitle('选择输入文件').then((path) => {
 				if (path.length !== 0) {
 					this.input = path

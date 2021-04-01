@@ -1,6 +1,6 @@
 <template>
-	<div style="padding: 0 10px">
-		<br>介绍开发者
+	<div class="font-color-overwrite">
+		介绍开发者
 		<br>用到的技术栈
 		<br>项目地址
 		<br>开源协议

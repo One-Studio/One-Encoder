@@ -24,12 +24,18 @@ html {
     overflow: hidden;
 }
 
-.container {
-    /*padding: 0 20px;*/
-    height: 380px;
+.panel {
     width: 640px;
+    padding-bottom: 10px;
+    overflow: hidden;
+    /*屏蔽滚动条*/
+    -ms-overflow-style: none;
+}
+
+.container {
+    width: 660px;
+    height: 420px;
     position: fixed;
-    /*background-color: black;*/
     background-color: #fefefe;
     transition: all 0.6s ease;
     transform-origin: left top;
@@ -39,21 +45,22 @@ html {
     transition: opacity 0.3s ease;
 }
 
+.font-color-overwrite {
+    color: rgba(0, 0, 0, 0.65);
+}
+
+.tab-container {
+    padding: 10px;
+    height: 400px;
+}
+
 .van-tabs__wrap {
-    width: 34%;
-    height: 36px !important;
+    width: 50%;
+    height: 42px !important;
 }
 
 .van-tab {
-    font-size: 16px !important;
-}
-
-.panel {
-    width: 620px;
-    padding-bottom: 10px;
-    overflow: hidden;
-    /*屏蔽滚动条*/
-    -ms-overflow-style: none;
+    font-size: 18px !important;
 }
 
 .progress {
@@ -67,4 +74,9 @@ html {
 .ant-tabs-nav {
     margin-left: 10px !important;
     font-size: 16px;
+}
+
+/*如果用ant的tabs，*/
+.ant-tabs-adjust {
+    /*padding: 0 10px*/
 }

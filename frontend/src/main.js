@@ -3,13 +3,16 @@ import 'regenerator-runtime/runtime';
 import Vue from 'vue';
 import App from './App.vue';
 
+import {Tab, Tabs} from 'vant';
 // import Vant from 'vant';
-// import 'vant/lib/index.css';
+import 'vant/lib/index.css';
 // import ElementUI from 'element-ui';
 // import 'element-ui/lib/theme-chalk/index.css';
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 
+Vue.use(Tab);
+Vue.use(Tabs);
 // Vue.use(Vant);
 // Vue.use(ElementUI);
 Vue.use(Antd);
