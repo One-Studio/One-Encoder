@@ -46,6 +46,7 @@ html {
 }
 
 .font-color-overwrite {
+    font-size: 14px;
     color: rgba(0, 0, 0, 0.65);
 }
 
@@ -79,4 +80,12 @@ html {
 /*如果用ant的tabs，*/
 .ant-tabs-adjust {
     /*padding: 0 10px*/
+}
+
+.ant-input-group-addon {
+    font-size: 15px !important;
+}
+
+.ant-input-search .ant-input {
+    font-size: 12px;
 }

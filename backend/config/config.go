@@ -90,6 +90,7 @@ func (c *CFG) SetCFG(cfg CFG) {
 	c.X264 = cfg.X264
 	c.X265 = cfg.X265
 	c.VapourSynth = cfg.VapourSynth
+	c.Pssuspend = cfg.Pssuspend
 	c.FFmpegParam = cfg.FFmpegParam
 	c.FFprobeParam = cfg.FFprobeParam
 	c.X264Param = cfg.X264Param

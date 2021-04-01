@@ -50,10 +50,10 @@ func (a *App) WailsShutdown() {
 
 //设置后端 TODO
 func (a *App) SetupBackend() string {
-	//if err := a.cfg.FFmpeg.Install(); err != nil {
-	//	return err.Error()
-	//}
-	//a.noticeSuccess("FFmpeg安装/更新成功！")
+	if err := a.cfg.FFmpeg.Install(); err != nil {
+		return err.Error()
+	}
+	a.noticeSuccess("FFmpeg安装/更新成功！")
 
 	//if err := a.cfg.FFprobe.Install(); err != nil {
 	//	return err.Error()
@@ -69,13 +69,13 @@ func (a *App) SetupBackend() string {
 	//	return err.Error()
 	//}
 	//a.noticeSuccess("x265安装/更新成功！")
-	//
-	//if runtime.GOOS == "windows" {
-	//	if err := a.cfg.Pssuspend.Install(); err != nil {
-	//		return err.Error()
-	//	}
-	//	a.noticeSuccess("pssuspend成功！")
-	//}
+
+	if runtime.GOOS == "windows" {
+		if err := a.cfg.Pssuspend.Install(); err != nil {
+			return err.Error()
+		}
+		a.noticeSuccess("pssuspend成功！")
+	}
 
 	//if err := a.cfg.VapourSynth.Install(); err != nil {
 	//	return err.Error()
@@ -110,7 +110,6 @@ func (a *App) StartEncode(input, output, param, tool string) string {
 	}
 
 	//工具 参数
-	var sig = make(chan rune)
 	var command string
 	switch tool {
 	case "ffmpeg":
@@ -139,15 +138,18 @@ func (a *App) StartEncode(input, output, param, tool string) string {
 	go func() {
 		a.runtime.Events.On("RealtimeSignal", func(data ...interface{}) {
 			fmt.Println("收到信号:", data[0])
-			sig <- data[0].(rune)
+			a.sig <- data[0].(rune)
 		})
 	}()
 
 	a.noticeWarning(command)
-	err := pls.ExecRealtimeControl(command, func(line string) {
-		a.setProgress(66.57)
-		a.setPerLog(line)
-	}, sig, a.cfg.Pssuspend.Path)
+	//TODO 修改ptools包以解决ffmpeg调用的参数问题
+	_, err := pls.Exec(command)
+	//_, err := pls.CMD(command)
+	//err := pls.ExecRealtimeControl(command, func(line string) {
+	//	a.setProgress(66.57)
+	//	a.setPerLog(line)
+	//}, a.sig, a.cfg.Pssuspend.Path)
 	if err != nil {
 		return err.Error()
 	}
