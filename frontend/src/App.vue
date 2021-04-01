@@ -78,34 +78,12 @@ export default {
 	methods: {
 		adaptScale() {
 			let h = document.body.clientWidth; //获得屏幕宽度
-			this.scale = h / 600;
+			this.scale = h / 640;
 		}
 	}
 };
 </script>
 
 <style>
-.container {
-	/*padding: 0 20px;*/
-	height: 380px;
-	width: 640px;
-	position: fixed;
-	/*background-color: black;*/
-	background-color: #fefefe;
-	transition: all 0.6s ease;
-	transform-origin: left top;
-}
 
-.opacity-container {
-	transition: opacity 0.3s ease;
-}
-
-.van-tabs__wrap {
-	width: 34%;
-	height: 36px !important;
-}
-
-.van-tab {
-	font-size: 16px !important;
-}
 </style>

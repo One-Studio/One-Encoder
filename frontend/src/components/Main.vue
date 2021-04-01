@@ -1,62 +1,70 @@
 <template>
 	<div style="padding: 0 10px">
-		<a-input
+		<a-input-search
 			class="panel"
-			:placeholder="this.input"
+      allow-clear
+      addon-before="输入"
+			placeholder="请选择输入"
 			size="large"
 		>
-			<a-icon slot="addonAfter" @click="getInput" type="folder"/>
-			<template slot="addonBefore">输入</template>
-		</a-input>
+      <a-button slot="enterButton" @click="getInput">
+        <a-icon type="folder"/>
+      </a-button>
+		</a-input-search>
 		<input type="file" name="filename" id="open" style="display:none"/>
-		<a-input
+		<a-input-search
 			class="panel"
-			placeholder="请选择文件"
+      allow-clear
+      addon-before="输出"
+			placeholder="请选择输出"
 			size="large"
 		>
-			<a-icon slot="addonAfter" @click="getOutput" type="folder"/>
-			<template slot="addonBefore">输出</template>
-		</a-input>
+      <a-button slot="enterButton" @click="getOutput">
+        <a-icon type="folder"/>
+      </a-button>
+		</a-input-search>
 
 		<div class="panel">
 			<a-row type="flex" justify="space-between">
-				<a-radio-group button-style="solid" v-model="tool">
+				<a-radio-group button-style="solid" size="large" v-model="tool" default-value="ffmpeg">
 					<a-radio-button label="ffmpeg">ffmpeg</a-radio-button>
 					<a-radio-button label="x264">x264</a-radio-button>
 					<a-radio-button label="x265">x265</a-radio-button>
 				</a-radio-group>
-				<a-radio-group button-style="solid" v-model="preset">
-					<a-radio-button :label="0">预设1</a-radio-button>
-					<a-radio-button :label="1">预设2</a-radio-button>
-					<a-radio-button :label="2">预设3</a-radio-button>
+				<a-radio-group button-style="solid" size="large" v-model="preset" :default-value=0>
+					<a-radio-button :label=0>预设1</a-radio-button>
+					<a-radio-button :label=1>预设2</a-radio-button>
+					<a-radio-button :label=2>预设3</a-radio-button>
 				</a-radio-group>
 			</a-row>
 		</div>
-		<a-input class="panel" type="textarea" :rows="5" placeholder="压制代码" v-model="param[tool][preset]"></a-input>
-		<a-row type="flex" justify="space-between" align="middle" class="panel" style="margin-top: 20px;">
-			<a-col :span="16">
-				<a-row type="flex" justify="space-between" align="middle">
-					<a-col :span="3">
-						<a-progress type="circle" :showInfo="this.progressDisplayNum" :percent="75" :width="30"/>
-					</a-col>
-					<a-col :span="2">
-						{{ progress }}
-					</a-col>
-					<a-col :span="19">
-						{{ perLog }}
-					</a-col>
-				</a-row>
-			</a-col>
-			<a-col :span="8">
-				<a-row type="flex" justify="end">
-					<a-button size="large" @click="pauseEncode">暂停</a-button>
-					<a-button size="large" @click="encode" style="margin-left: 10px; width: 100px" :type="this.progressFinished ? '':'danger'">{{ startOrQuit }}
-					</a-button>
-				</a-row>
-			</a-col>
-		</a-row>
-		<!--    <br>压制代码档位-->
-		<!--    <br>信息-->
+    <div class="panel">
+      <a-input type="textarea" :autoSize="{ minRows: 5, maxRows: 5 }" placeholder="压制代码" v-model="param[tool][preset]"></a-input>
+    </div>
+    <div class="panel">
+      <a-row type="flex" justify="space-between" align="middle">
+        <a-col :span="16">
+          <a-row type="flex" justify="space-between" align="middle">
+            <a-col :span="2">
+              <a-progress type="circle" :showInfo="this.progressDisplayNum" :percent="progress" :width="26"/>
+            </a-col>
+            <a-col :span="3">
+              {{ progress }}%
+            </a-col>
+            <a-col :span="19" style="padding-left: 2px;">
+              {{ perLog }}
+            </a-col>
+          </a-row>
+        </a-col>
+        <a-col :span="8">
+          <a-row type="flex" justify="end">
+            <a-button size="large" @click="pauseEncode">暂停</a-button>
+            <a-button size="large" @click="encode" style="margin-left: 10px; width: 100px" :type="this.progressFinished ? '':'danger'">{{ startOrQuit }}
+            </a-button>
+          </a-row>
+        </a-col>
+      </a-row>
+    </div>
 	</div>
 </template>
 
@@ -71,14 +79,14 @@ export default {
 			input: '',
 			output: '',
 			param: {
-				ffmpeg: ['-vcodec libx264 -crf 20 -preset slow', '', ''],
+				ffmpeg: ['-vcodec libx264 -crf 20 -preset slow', 'test', ''],
 				x264: ['', '', ''],
 				x265: ['', '', ''],
 			},
 			tool: 'ffmpeg',
 			preset: 0,
 			perLog: '这里是单行日志信息',
-			progress: 0,
+			progress: 66.57,
 			paused: false,
 			startOrQuit: '开始',
 			// toolSelect: 0,
@@ -230,17 +238,3 @@ export default {
 	},
 }
 </script>
-
-<style scoped>
-.panel {
-	width: 580px;
-	padding-bottom: 10px;
-	overflow: hidden;
-	/*屏蔽滚动条*/
-	-ms-overflow-style: none;
-}
-
-.progress {
-	padding-bottom: 10px;
-}
-</style>
