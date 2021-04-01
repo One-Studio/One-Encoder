@@ -2,7 +2,7 @@
 	<div class="ant-tabs-adjust">
 <!--    <a-button @click="getInput"></a-button>-->
 		<a-input-search
-			class="panel" allow-clear
+			class="panel"
       addon-before="输入"
 			placeholder="请选择输入"
 			size="large"
@@ -15,7 +15,7 @@
 		</a-input-search>
 		<input type="file" name="filename" id="open" style="display:none"/>
 		<a-input-search
-			class="panel" allow-clear
+			class="panel"
       addon-before="输出"
 			placeholder="请选择输出"
 			size="large"
@@ -183,10 +183,10 @@ export default {
 			window.backend.App.SelectFileTitle('选择输入文件').then((path) => {
 				if (path.length !== 0) {
 					this.input = path
+          this.generateOutput()
 				}
 				//TODO 使用ffprobe获取输入文件参数
 
-				this.generateOutput()
 			})
 		},
 		getOutput() {
