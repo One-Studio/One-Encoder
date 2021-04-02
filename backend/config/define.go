@@ -9,6 +9,7 @@ import (
 type CFG struct {
 	AppVersion   string   //当前App版本号
 	Init         bool     //是否已经初始化
+	AutoUpdate   bool     //是否在程序开始的时候自动检查更新
 	FFmpegRegExp string   //ffmpeg提取进度用正则表达式
 	X264RegExp   string   //X264提取进度用正则表达式
 	X265RegExp   string   //X265提取进度用正则表达式

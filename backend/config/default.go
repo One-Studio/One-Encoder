@@ -16,6 +16,7 @@ var (
 func (c *CFG) SetDefCFG()  {
 	c.AppVersion = AppVersion
 	c.Init = false
+	c.AutoUpdate = false
 	c.FFmpegParam = nil
 	c.FFprobeParam = "-v quiet -print_format json -show_format"
 	c.X264Param = nil

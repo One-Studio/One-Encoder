@@ -4,6 +4,8 @@ github.com/Masterminds/semver v1.5.0/go.mod h1:MB6lktGJrhw8PrUyiEoblNEGEQ+RzHPF0
 github.com/Netflix/go-expect v0.0.0-20180615182759-c93bf25de8e8/go.mod h1:oX5x61PbNXchhh0oikYAH+4Pcfw5LKv21+Jnpr6r6Pc=
 github.com/One-Studio/ptools v0.1.1 h1:CI3040iEtuDlCKAW+Z4dxouxzBU9KNYG+nqQ1xrEbDY=
 github.com/One-Studio/ptools v0.1.1/go.mod h1:kM94h5YQsJkGnKq20c+19nVnRdBYOsX0ogqSIU7upl0=
+github.com/One-Studio/ptools v0.1.2 h1:KLIXWvcyryXFSGGNjmh8WhGDUKdOa1t+mKWgt/0yMRE=
+github.com/One-Studio/ptools v0.1.2/go.mod h1:kM94h5YQsJkGnKq20c+19nVnRdBYOsX0ogqSIU7upl0=
 github.com/abadojack/whatlanggo v1.0.1 h1:19N6YogDnf71CTHm3Mp2qhYfkRdyvbgwWdd2EPxJRG4=
 github.com/abadojack/whatlanggo v1.0.1/go.mod h1:66WiQbSbJBIlOZMsvbKe5m6pzQovxCH9B/K8tQB2uoc=
 github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394 h1:OYA+5W64v3OgClL+IrOD63t4i/RW7RqrAVl9LTZ9UqQ=

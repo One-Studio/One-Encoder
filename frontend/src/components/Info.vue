@@ -1,6 +1,6 @@
 <template>
-  <div class="font-color-overwrite">
-    {{ mediaInfo }}
+  <div class="font-color-overwrite" style="-ms-overflow-style: auto">
+    <pre>{{ mediaInfo }}</pre>
   </div>
 </template>
 
@@ -16,7 +16,8 @@ export default {
   },
   mounted() {
     Wails.Events.On('SetMediaInfo', (mediaInfo) => {
-      this.mediaInfo = JSON.stringify(mediaInfo, null, "\t")
+      const json = JSON.parse(mediaInfo)
+      this.mediaInfo = JSON.stringify(json, null, "\t")
     })
   }
 }

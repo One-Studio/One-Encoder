@@ -85,6 +85,7 @@ func (c *CFG) checkConfig(cfg CFG) (CFG, error) {
 func (c *CFG) SetCFG(cfg CFG) {
 	c.AppVersion = cfg.AppVersion
 	c.Init = cfg.Init
+	c.AutoUpdate = cfg.AutoUpdate
 	c.FFmpegRegExp = cfg.FFmpegRegExp
 	c.X264RegExp = cfg.X264RegExp
 	c.X265RegExp = cfg.X265RegExp

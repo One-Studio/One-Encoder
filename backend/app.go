@@ -59,37 +59,91 @@ func (a *App) WailsShutdown() {
 	return
 }
 
-//设置后端 TODO
+//设置后端
 func (a *App) SetupBackend() string {
-	if err := a.cfg.FFmpeg.Install(); err != nil {
-		return err.Error()
-	}
-	//a.noticeSuccess("FFmpeg安装/更新成功！")
-
-	if err := a.cfg.FFprobe.Install(); err != nil {
-		return err.Error()
-	}
-	//a.noticeSuccess("FFprobe安装/更新成功！")
-
-	//if err := a.cfg.X264.Install(); err != nil {
-	//	return err.Error()
-	//}
-	//a.noticeSuccess("x264安装/更新成功！")
-	//
-	//if err := a.cfg.X265.Install(); err != nil {
-	//	return err.Error()
-	//}
-	//a.noticeSuccess("x265安装/更新成功！")
-
-	if runtime.GOOS == "windows" {
-		if err := a.cfg.Pssuspend.Install(); err != nil {
-			return err.Error()
+	//FFmpeg检查
+	if !a.cfg.FFmpeg.CheckExist() {
+		found := false
+		if !a.cfg.AutoUpdate {
+			//检查环境变量
+			found = a.cfg.FFmpeg.CheckEnvPath()
 		}
-		//a.noticeSuccess("pssuspend安装/更新成功！")
-	}
 
-	//if err := a.cfg.VapourSynth.Install(); err != nil {
-	//	return err.Error()
+		if !found {
+			if err := a.cfg.FFmpeg.Install(); err != nil {
+				return err.Error()
+			}
+		}
+	}
+	//FFprobe检查
+	if !a.cfg.FFprobe.CheckExist() {
+		found := false
+		if !a.cfg.AutoUpdate {
+			//检查环境变量
+			found = a.cfg.FFprobe.CheckEnvPath()
+		}
+
+		if !found {
+			if err := a.cfg.FFprobe.Install(); err != nil {
+				return err.Error()
+			}
+		}
+	}
+	//x264检查
+	if !a.cfg.X264.CheckExist() {
+		found := false
+		if !a.cfg.AutoUpdate {
+			//检查环境变量
+			found = a.cfg.X264.CheckEnvPath()
+		}
+
+		if !found {
+			if err := a.cfg.X264.Install(); err != nil {
+				return err.Error()
+			}
+		}
+	}
+	//x265检查
+	if !a.cfg.X265.CheckExist() {
+		found := false
+		if !a.cfg.AutoUpdate {
+			//检查环境变量
+			found = a.cfg.X265.CheckEnvPath()
+		}
+
+		if !found {
+			if err := a.cfg.X265.Install(); err != nil {
+				return err.Error()
+			}
+		}
+	}
+	//Pssuspend检查
+	if !a.cfg.Pssuspend.CheckExist() {
+		found := false
+		if !a.cfg.AutoUpdate {
+			//检查环境变量
+			found = a.cfg.Pssuspend.CheckEnvPath()
+		}
+
+		if !found && runtime.GOOS == "windows" {
+			if err := a.cfg.Pssuspend.Install(); err != nil {
+				return err.Error()
+			}
+		}
+	}
+	//VapourSynth检查
+	//if !a.cfg.VapourSynth.CheckExist() {
+	//	found := false
+	//	if !a.cfg.AutoUpdate {
+	//		//检查环境变量
+	//		found = a.cfg.VapourSynth.CheckEnvPath()
+	//	}
+	//
+	//	if !found && runtime.GOOS == "windows" {
+	//		if err := a.cfg.VapourSynth.Install(); err != nil {
+	//			return err.Error()
+	//		}
+	//	}
 	//}
 
 	if a.cfg.Init {
@@ -123,7 +177,7 @@ func (a *App) GetMediaInfo(input string) string {
 	cmdArgs = append(cmdArgs, strings.Fields(a.cfg.FFprobeParam)...)
 	cmdArgs = append(cmdArgs, input)
 
-	if output, err := pls.CmdArgs(cmdArgs); err != nil {
+	if output, err := pls.ExecArgs(cmdArgs); err != nil {
 		return err.Error()
 	} else {
 		a.setMediaInfo(output)

@@ -1,6 +1,7 @@
 {
     "AppVersion": "v0.1.1",
-    "Init": false,
+    "Init": true,
+    "AutoUpdate": false,
     "FFmpegRegExp": "",
     "X264RegExp": "",
     "X265RegExp": "",
@@ -8,7 +9,7 @@
         "Name": "ffmpeg",
         "Path": ".\\tools\\ffmpeg.exe",
         "TakeOver": true,
-        "Version": "4.3.2-2021-02-27",
+        "Version": "",
         "VersionApi": "https://www.gyan.dev/ffmpeg/builds/release-version",
         "VersionApiCDN": "https://cdn.jsdelivr.net/gh/One-Studio/FFmpeg-Win64@master/version",
         "DownloadLink": "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.7z",
