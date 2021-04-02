@@ -6,9 +6,15 @@ import (
 	"runtime"
 )
 
+var (
+	AppName = "One Encoder"
+	AppVersion = "v0.1.1"
+	AppDeveloper = "One Studio"
+)
+
 /// 默认设置
 func (c *CFG) SetDefCFG()  {
-	c.AppVersion = "v0.1.1"
+	c.AppVersion = AppVersion
 	c.Init = false
 	c.FFmpegParam = nil
 	c.FFprobeParam = "-v quiet -print_format json -show_format"
@@ -86,7 +92,7 @@ func (c *CFG) SetDefCFG()  {
 			panic("获取应用配置目录失败: " + err.Error())
 		}
 
-		dir := cfgDir + "/One Studio/One Encoder"
+		dir := cfgDir + "/" + AppDeveloper + "/" + AppName
 
 		c.FFmpeg = pls.Tool{
 			Name: "ffmpeg",
@@ -146,7 +152,7 @@ func (c *CFG) SetDefCFG()  {
 			panic("获取应用配置目录失败: " + err.Error())
 		}
 
-		dir := cfgDir + "/One Studio/One Encoder"
+		dir := cfgDir + "/" + AppDeveloper + "/" + AppName
 
 		c.FFmpeg = pls.Tool{
 			Name: "ffmpeg",
