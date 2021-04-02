@@ -74,7 +74,7 @@ func (c *CFG) CFG2Json() (string, error) {
 	return str.String(), nil
 }
 
-//检查设置，更新覆盖部分设置
+//检查设置，更新覆盖部分设置 TODO
 func (c *CFG) checkConfig(cfg CFG) (CFG, error) {
 	//cfg.AppVersion = defaultCFG.AppVersion
 
@@ -85,6 +85,9 @@ func (c *CFG) checkConfig(cfg CFG) (CFG, error) {
 func (c *CFG) SetCFG(cfg CFG) {
 	c.AppVersion = cfg.AppVersion
 	c.Init = cfg.Init
+	c.FFmpegRegExp = cfg.FFmpegRegExp
+	c.X264RegExp = cfg.X264RegExp
+	c.X265RegExp = cfg.X265RegExp
 	c.FFmpeg = cfg.FFmpeg
 	c.FFprobe = cfg.FFprobe
 	c.X264 = cfg.X264
@@ -95,5 +98,4 @@ func (c *CFG) SetCFG(cfg CFG) {
 	c.FFprobeParam = cfg.FFprobeParam
 	c.X264Param = cfg.X264Param
 	c.X265Param = cfg.X265Param
-	c.Current = cfg.Current
 }

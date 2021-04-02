@@ -1,12 +1,24 @@
 <template>
-  <div>
-    这里展示媒体信息
+  <div class="font-color-overwrite">
+    {{ mediaInfo }}
   </div>
 </template>
 
 <script>
+import Wails from "@wailsapp/runtime";
+
 export default {
-name: "Info"
+  name: "Info",
+  data() {
+    return {
+      mediaInfo: ''
+    }
+  },
+  mounted() {
+    Wails.Events.On('SetMediaInfo', (mediaInfo) => {
+      this.mediaInfo = JSON.stringify(mediaInfo, null, "\t")
+    })
+  }
 }
 </script>
 

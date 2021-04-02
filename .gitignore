@@ -20,3 +20,4 @@ build/tools/ffmpeg.exe
 build/tools/x264.exe
 build/tools/x265.exe
 build/tools/pssuspend.exe
+build/tools/ffprobe.exe

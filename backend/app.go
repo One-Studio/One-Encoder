@@ -4,6 +4,7 @@ import (
 	"One-Encoder/backend/config"
 	"fmt"
 	"log"
+	"os"
 	"path/filepath"
 	"runtime"
 	"strconv"
@@ -18,18 +19,28 @@ import (
 //App设置
 type App struct {
 	runtime *wails.Runtime //初始化Runtime需要
-	cfg     config.CFG
-	sig     chan rune //控制压制暂停/继续/结束的channel
-	//zoom
+	cfg     config.CFG     //程序设置
+	sig     chan rune      //控制压制暂停/继续/结束的channel
+	cfgPath string         //配置文件位置
 }
 
 //Wails初始化
-func (a *App) WailsInit(runtime *wails.Runtime) error {
-	a.runtime = runtime
+func (a *App) WailsInit(rt *wails.Runtime) error {
+	a.runtime = rt
 	//初始化后：
-	var err error
-	if err = a.cfg.ReadConfig("./config.json"); err != nil {
-		//a.runtime.Events.Emit("SetLog", err)	//TODO 这个时候页面还没有mounted 似乎会弹脚本错误
+	if runtime.GOOS == "windows" {
+		a.cfgPath = "./config.json"
+	} else {
+		cfgDir, err := os.UserConfigDir()
+		if err != nil {
+			panic("获取应用配置目录失败: " + err.Error())
+		}
+
+		a.cfgPath = cfgDir + "/One Studio/One Encoder/config.json"
+	}
+
+	if err := a.cfg.ReadConfig(a.cfgPath); err != nil {
+		//a.rt.Events.Emit("SetLog", err)	//TODO 这个时候页面还没有mounted 似乎会弹脚本错误
 		log.Println(err)
 		return err
 	}
@@ -41,7 +52,7 @@ func (a *App) WailsInit(runtime *wails.Runtime) error {
 func (a *App) WailsShutdown() {
 	//结束前：
 	fmt.Println("Wails结束")
-	err := a.cfg.SaveConfig("./config.json")
+	err := a.cfg.SaveConfig(a.cfgPath)
 	if err != nil {
 		log.Println(err)
 	}
@@ -53,11 +64,11 @@ func (a *App) SetupBackend() string {
 	if err := a.cfg.FFmpeg.Install(); err != nil {
 		return err.Error()
 	}
-	a.noticeSuccess("FFmpeg安装/更新成功！")
+	//a.noticeSuccess("FFmpeg安装/更新成功！")
 
-	//if err := a.cfg.FFprobe.Install(); err != nil {
-	//	return err.Error()
-	//}
+	if err := a.cfg.FFprobe.Install(); err != nil {
+		return err.Error()
+	}
 	//a.noticeSuccess("FFprobe安装/更新成功！")
 
 	//if err := a.cfg.X264.Install(); err != nil {
@@ -74,15 +85,20 @@ func (a *App) SetupBackend() string {
 		if err := a.cfg.Pssuspend.Install(); err != nil {
 			return err.Error()
 		}
-		a.noticeSuccess("pssuspend成功！")
+		//a.noticeSuccess("pssuspend安装/更新成功！")
 	}
 
 	//if err := a.cfg.VapourSynth.Install(); err != nil {
 	//	return err.Error()
 	//}
 
-	a.cfg.Init = true
-	a.noticeSuccess("更新成功！")
+	if a.cfg.Init {
+		a.noticeSuccess("工具更新成功！")
+	} else {
+		a.cfg.Init = true
+		a.noticeSuccess("工具安装成功！")
+	}
+
 	return ""
 }
 
@@ -98,7 +114,24 @@ func (a *App) GenerateOutput(input string) (output string) {
 	return output
 }
 
-//调用工具
+func (a *App) GetMediaInfo(input string) string {
+	if !a.cfg.FFprobe.CheckExist() {
+		a.noticeWarning("FFprobe未正确安装")
+	}
+
+	cmdArgs := []string{a.cfg.FFprobe.Path}
+	cmdArgs = append(cmdArgs, strings.Fields(a.cfg.FFprobeParam)...)
+	cmdArgs = append(cmdArgs, input)
+
+	if output, err := pls.CmdArgs(cmdArgs); err != nil {
+		return err.Error()
+	} else {
+		a.setMediaInfo(output)
+		return ""
+	}
+}
+
+//调用工具 TODO 进度获取 TODO2 暂停/结束功能
 //Param: Input Output Param压制参数 Tool用哪个工具
 //Return: error
 func (a *App) StartEncode(input, output, param, tool string) string {
@@ -110,31 +143,33 @@ func (a *App) StartEncode(input, output, param, tool string) string {
 	}
 
 	//工具 参数
-	var command string
+	params := strings.Fields(param)
+	var cmdArgs []string
 	switch tool {
 	case "ffmpeg":
 		if !a.cfg.FFmpeg.CheckExist() {
 			return "ffmpeg工具未正确安装"
 		}
-		command = a.cfg.FFmpeg.Path + " -i \"" + input + "\" " + param + " \"" + output + "\""
+		cmdArgs = []string{a.cfg.FFmpeg.Path, "-i", input}
+		cmdArgs = append(cmdArgs, params...)
+		cmdArgs = append(cmdArgs, output, "-y")
 	case "x264":
 		if !a.cfg.X264.CheckExist() {
 			return "x264工具未正确安装"
 		}
-		command = a.cfg.X264.Path + " \"" + input + "\" " + param + " -o \"" + output + "\""
+		cmdArgs = []string{a.cfg.X264.Path, input}
+		cmdArgs = append(cmdArgs, params...)
+		cmdArgs = append(cmdArgs, "-o", output, "-y")
 	case "x265":
 		if !a.cfg.X265.CheckExist() {
 			return "x265工具未正确安装"
 		}
-		command = a.cfg.X265.Path + " \"" + input + "\" " + param + " -o \"" + output + "\""
-	case "ffprobe":
-		if !a.cfg.FFprobe.CheckExist() {
-			return "ffprobe工具未正确安装"
-		}
-		command = a.cfg.FFprobe.Path + " -v quiet -print_format json -show_format \"" + input + "\""
+		cmdArgs = []string{a.cfg.X265.Path, input}
+		cmdArgs = append(cmdArgs, params...)
+		cmdArgs = append(cmdArgs, "-o", output, "-y")
 	}
 
-	//接受暂停/终止信号量 TODO debug
+	//接受暂停/终止信号量 TODO 暂停/结束功能有bug
 	go func() {
 		a.runtime.Events.On("RealtimeSignal", func(data ...interface{}) {
 			fmt.Println("收到信号:", data[0])
@@ -142,14 +177,10 @@ func (a *App) StartEncode(input, output, param, tool string) string {
 		})
 	}()
 
-	a.noticeWarning(command)
-	//TODO 修改ptools包以解决ffmpeg调用的参数问题
-	_, err := pls.Exec(command)
-	//_, err := pls.CMD(command)
-	//err := pls.ExecRealtimeControl(command, func(line string) {
-	//	a.setProgress(66.57)
-	//	a.setPerLog(line)
-	//}, a.sig, a.cfg.Pssuspend.Path)
+	err := pls.ExecRealtimeControlArgs(cmdArgs, func(line string) {
+		a.setProgress(66.57)
+		a.setPerLog(line)
+	}, a.sig, a.cfg.Pssuspend.Path)
 	if err != nil {
 		return err.Error()
 	}
@@ -157,52 +188,24 @@ func (a *App) StartEncode(input, output, param, tool string) string {
 	return ""
 }
 
-func (a *App) ParseDragFiles() (string, error) {
+//func (a *App) ParseDragFiles() (string, error) {
+//
+//	return "", nil
+//}
 
-	return "", nil
+//暂停压制
+func (a *App) PauseEncoding() {
+	pls.Pause(a.sig)
 }
 
-func (a *App) StartEncoding(name string) error {
-	//t := a.cfg.Tools[name]
-	//判断存在
-	//if ok, err := tool.IsFileExisted(t.Path); err != nil || !ok {
-	//	return errors.New("tool " + name + " does not exist")
-	//}
-
-	//path := "C:/Users/Purp1e/go/src/github.com/One-Studio/One-Encoder/build/tools/ffmpeg.exe"
-	//input := "C:/Users/Purp1e/Videos/测试.mp4"
-	//output := "C:/Users/Purp1e/Desktop/测试One-Encoder.mp4"
-	//param := "-vcodec libx264 -crf 20 -preset slow"
-
-	//command := path + " -i " + input + " " + param + " " + output + " -y"
-	//arg := "-i " + input + " " + param + " " + output + " -y"
-	//得到指令
-	//command := t.Path + " " + t.InputPrefix + " " + a.cfg.Input + " " + t.Param + " " + t.OutputPrefix + " " + a.cfg.Output
-
-	//执行
-	//tool.CmdRealtime(path, arg, func(progress float64) {
-	//	a.setProgress(progress)
-	//})
-	//if output, err := tool.Cmd(command); err != nil {
-	//	a.noticeError(output)
-	//	return err
-	//}
-	return nil
+//结束压制
+func (a *App) QuitEncoding() {
+	pls.Quit(a.sig)
 }
 
-func (a *App) PauseEncoding() (string, error) {
-
-	return "", nil
-}
-
-func (a *App) QuitEncoding() (string, error) {
-
-	return "", nil
-}
-
-func (a *App) CheckUpdate() error {
-
-	return nil
+//继续压制
+func (a *App) ResumeEncoding() {
+	pls.Resume(a.sig)
 }
 
 func (a *App) BrowseLog() (string, error) {

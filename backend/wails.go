@@ -22,11 +22,6 @@ func (a *App) SayHello() string {
 	return "Hello to Frontend!"
 }
 
-func (a *App) Test(str1, str2, str3 string) (result string) {
-	result = "Backend has got:\nstr1 = " + str1 + "\nstr2 = " + str2 + "\nstr3 = " + str3
-	return
-}
-
 //设置进度条
 func (a *App) setProgress(progress float64) {
 	a.runtime.Events.Emit("SetProgess", progress)
@@ -50,6 +45,11 @@ func (a *App) setVersionCode(versionCode string) {
 //设置App版本
 func (a *App) setAppVersion(appVersion string) {
 	a.runtime.Events.Emit("SetAppVersion", appVersion)
+}
+
+//设置媒体信息
+func (a *App) setMediaInfo(mediaInfo string) {
+	a.runtime.Events.Emit("SetMediaInfo", mediaInfo)
 }
 
 //通知成功

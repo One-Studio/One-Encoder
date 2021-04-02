@@ -51,8 +51,8 @@
         </a-col>
         <a-col :span="8">
           <a-row type="flex" justify="end">
-            <a-button size="large" @click="pauseEncode">暂停</a-button>
-            <a-button size="large" @click="encode" style="margin-left: 10px; width: 100px">{{ startOrQuit }}</a-button>
+            <a-button size="large" :loading="loading" :disabled="!started" @click="pauseEncode">{{ paused?'继续':'暂停' }}</a-button>
+            <a-button size="large" :loading="loading" @click="encode" style="margin-left: 10px; width: 100px">{{ started?'结束':'开始' }}</a-button>
           </a-row>
         </a-col>
       </a-row>
@@ -73,14 +73,16 @@ export default {
       param: {
         ffmpeg: ['-vcodec libx264 -crf 20 -preset slow', '-c:v prores', ''],
         x264: ['--crf 20 --preset slow', '', ''],
-        x265: ['', '', ''],
+        x265: ['--crf 20 --preset slow --no-sao', '', ''],
       },
       tool: 'ffmpeg',
       preset: '0',
-      perLog: '这里是单行日志信息',
+      perLog: '这里是日志信息',
       progress: 66.57,
+      started: false,
       paused: false,
       startOrQuit: '开始',
+      loading: false,
       // status: false  //是否正在执行
       progressFinished: true,
       progressDisplayNum: false
@@ -104,6 +106,7 @@ export default {
     //   e.preventDefault();
     //   this.borderhover =  true
     // })
+    this.loading = true
     Wails.Events.On('SetProgess', (progress) => {
       this.progress = progress.toFixed(2)
     })
@@ -124,6 +127,9 @@ export default {
       if (error !== '') {
         this.$message.error(error)
       }
+
+      //设置开始/暂停按钮可选
+      this.loading = false
     })
   },
   methods: {
@@ -161,16 +167,13 @@ export default {
     //   window.backend.App.SetParam(this.select, this.param[this.select])
     // },
     getInput() {
-      // console.log("选择输入文件debug")
-      // document.getElementById('open').click()
-      // console.log('document.getElementById(\'open\').files', document.getElementById('open').files)
       window.backend.App.SelectFileTitle('选择输入文件').then((path) => {
         if (path.length !== 0) {
           this.input = path
           this.generateOutput()
+          //TODO 使用ffprobe获取输入文件参数
+          window.backend.App.GetMediaInfo(this.input)
         }
-        //TODO 使用ffprobe获取输入文件参数
-
       })
     },
     getOutput() {
@@ -188,20 +191,9 @@ export default {
         }
       })
     },
-    // onStart () {
-    //   this.setVar()
-    //   //debug
-    //   // this.status = !this.status
-    //   //根据情况决定开始/结束压制
-    //   if (this.status === false) {
-    //     this.StartEncoding()
-    //   } else {
-    //     this.QuitEncoding()
-    //   }
-    // },
     encode() {
-      if (this.startOrQuit === '开始') {
-        this.startOrQuit = '结束'
+      if (!this.started) {
+        this.started = true
         window.backend.App.StartEncode(
             this.input,
             this.output,
@@ -211,19 +203,23 @@ export default {
           if (error !== null) {
             this.$message.error(error, 5)
           }
-          this.startOrQuit = '开始'
+          this.started = false
           this.paused = false
-          this.progressFinished = false
+          // this.progressFinished = false
         })
       } else {
-        Wails.Events.Emit('RealtimeSignal', 'q')
+        Wails.backend.App.QuitEncoding()
       }
     },
     pauseEncode() {
       if (this.paused) {
-        Wails.Events.Emit('RealtimeSignal', 'r')
+        Wails.backend.App.ResumeEncoding().then(
+            this.paused = false
+        )
       } else {
-        Wails.Events.Emit('RealtimeSignal', 'p')
+        Wails.backend.App.PauseEncoding().then(
+            this.paused = true
+        )
       }
     },
   },

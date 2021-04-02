@@ -1,6 +1,9 @@
 {
-    "AppVersion": "v0.1.0",
-    "Init": true,
+    "AppVersion": "v0.1.1",
+    "Init": false,
+    "FFmpegRegExp": "",
+    "X264RegExp": "",
+    "X265RegExp": "",
     "FFmpeg": {
         "Name": "ffmpeg",
         "Path": ".\\tools\\ffmpeg.exe",
@@ -104,8 +107,7 @@
         "Fetch": ""
     },
     "FFmpegParam": null,
-    "FFprobeParam": null,
+    "FFprobeParam": "-v quiet -print_format json -show_format",
     "X264Param": null,
-    "X265Param": null,
-    "Current": 0
+    "X265Param": null
 }
