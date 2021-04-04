@@ -2,7 +2,7 @@
 	<div id="app" class="container" :style="`transform: scale(${scale});`">
 		<div class="opacity-container" :style="`opacity: ${opacity}`">
 						<van-tabs
-							type="line" animated line-height="2" line-width="60"
+							type="line" animated swipeable :lazy-render=false line-height="2" line-width="52"
               background="#fefefe" duration="0.4" color="rgb(64,158,255)"
             >
 							<van-tab title="压制" class="tab-container"><Main></Main></van-tab>
@@ -33,7 +33,7 @@ export default {
 		return {
 			scale: 1,
 			opacity: 0,
-      appWidth: 660
+      appWidth: 660 /* app的宽度 $$$ */
 		};
 	},
 	mounted() {

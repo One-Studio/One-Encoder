@@ -25,7 +25,7 @@ html {
 }
 
 .panel {
-    width: 640px;
+    width: 640px; /* 每个标签页的宽度 $$$ */
     padding-bottom: 10px;
     overflow: hidden;
     /*屏蔽滚动条*/
@@ -33,7 +33,7 @@ html {
 }
 
 .container {
-    width: 660px;
+    width: 660px; /* App的宽度 $$$ */
     height: 420px;
     position: fixed;
     background-color: #fefefe;
@@ -56,7 +56,7 @@ html {
 }
 
 .van-tabs__wrap {
-    width: 50%;
+    width: 44%;
     height: 42px !important;
 }
 

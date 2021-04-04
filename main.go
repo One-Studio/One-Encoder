@@ -9,7 +9,7 @@ import (
 func main() {
 	//TODO 启动前读取CFG，包括w, h, scale
 
-	w, h := 660, 394
+	w, h := 660, 394 // app的宽高 $$$
 	//无边框窗口特性 wails v2.0之前解决固定窗口高度问题 TODO linux 高度测试
 
 	//绑定js和css
