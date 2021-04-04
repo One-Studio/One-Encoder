@@ -213,14 +213,14 @@ func (a *App) StartEncode(input, output, param, tool string) string {
 		}
 		cmdArgs = []string{a.cfg.X264.Path, input}
 		cmdArgs = append(cmdArgs, params...)
-		cmdArgs = append(cmdArgs, "-o", output, "-y")
+		cmdArgs = append(cmdArgs, "--output", output)
 	case "x265":
 		if !a.cfg.X265.CheckExist() {
 			return "x265工具未正确安装"
 		}
 		cmdArgs = []string{a.cfg.X265.Path, input}
 		cmdArgs = append(cmdArgs, params...)
-		cmdArgs = append(cmdArgs, "-o", output, "-y")
+		cmdArgs = append(cmdArgs, "-o", output)
 	}
 
 	//接受暂停/终止信号量 TODO 暂停/结束功能有bug
