@@ -59,8 +59,14 @@ func (a *App) WailsShutdown() {
 	return
 }
 
-//设置后端
+//设置后端 TODO: 启动检查改进
 func (a *App) SetupBackend() string {
+	//TODO: 测试
+	// a.runtime.Events.On("RealtimeSignal", func(data ...interface{}) {
+	// 	fmt.Println("收到信号:", data[0])
+	// 	a.sig <- data[0].(rune)
+	// })
+
 	//FFmpeg检查
 	if !a.cfg.FFmpeg.CheckExist() {
 		found := false
@@ -223,13 +229,7 @@ func (a *App) StartEncode(input, output, param, tool string) string {
 		cmdArgs = append(cmdArgs, "-o", output)
 	}
 
-	//接受暂停/终止信号量 TODO 暂停/结束功能有bug
-	go func() {
-		a.runtime.Events.On("RealtimeSignal", func(data ...interface{}) {
-			fmt.Println("收到信号:", data[0])
-			a.sig <- data[0].(rune)
-		})
-	}()
+	//接受暂停/终止信号量 TODO: 暂停/结束功能有bug
 
 	err := pls.ExecRealtimeControlArgs(cmdArgs, func(line string) {
 		a.setProgress(66.57)
