@@ -67,6 +67,11 @@ func (a *App) SetupBackend() string {
 	// 	a.sig <- data[0].(rune)
 	// })
 
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0])) //返回绝对路径  filepath.Dir(os.Args[0])去除最后一个元素的路径
+	if err == nil {
+		a.setPerLog(dir)
+	}
+
 	//FFmpeg检查
 	if !a.cfg.FFmpeg.CheckExist() {
 		found := false
@@ -77,20 +82,6 @@ func (a *App) SetupBackend() string {
 
 		if !found {
 			if err := a.cfg.FFmpeg.Install(); err != nil {
-				return err.Error()
-			}
-		}
-	}
-	//FFprobe检查
-	if !a.cfg.FFprobe.CheckExist() {
-		found := false
-		if !a.cfg.AutoUpdate {
-			//检查环境变量
-			found = a.cfg.FFprobe.CheckEnvPath()
-		}
-
-		if !found {
-			if err := a.cfg.FFprobe.Install(); err != nil {
 				return err.Error()
 			}
 		}
@@ -119,6 +110,20 @@ func (a *App) SetupBackend() string {
 
 		if !found {
 			if err := a.cfg.X265.Install(); err != nil {
+				return err.Error()
+			}
+		}
+	}
+	//MediaInfo检查
+	if !a.cfg.MediaInfo.CheckExist() {
+		found := false
+		if !a.cfg.AutoUpdate {
+			//检查环境变量
+			found = a.cfg.MediaInfo.CheckEnvPath()
+		}
+
+		if !found {
+			if err := a.cfg.MediaInfo.Install(); err != nil {
 				return err.Error()
 			}
 		}
@@ -175,12 +180,12 @@ func (a *App) GenerateOutput(input string) (output string) {
 }
 
 func (a *App) GetMediaInfo(input string) string {
-	if !a.cfg.FFprobe.CheckExist() {
-		a.noticeWarning("FFprobe未正确安装")
+	if !a.cfg.MediaInfo.CheckExist() {
+		a.noticeWarning("MediaInfo未正确安装")
 	}
 
-	cmdArgs := []string{a.cfg.FFprobe.Path}
-	cmdArgs = append(cmdArgs, strings.Fields(a.cfg.FFprobeParam)...)
+	cmdArgs := []string{a.cfg.MediaInfo.Path}
+	cmdArgs = append(cmdArgs, strings.Fields("--OUTPUT=JSON")...)
 	cmdArgs = append(cmdArgs, input)
 
 	if output, err := pls.ExecArgs(cmdArgs); err != nil {
@@ -230,14 +235,30 @@ func (a *App) StartEncode(input, output, param, tool string) string {
 	}
 
 	//接受暂停/终止信号量 TODO: 暂停/结束功能有bug
-
+	var logs []string
 	err := pls.ExecRealtimeControlArgs(cmdArgs, func(line string) {
 		a.setProgress(66.57)
 		a.setPerLog(line)
+		logs = append(logs, line)
 	}, a.sig, a.cfg.Pssuspend.Path)
 	if err != nil {
+		//a.noticeError(err.Error())
 		return err.Error()
 	}
+
+	//output, err = pls.CMD("chmod u+x .")
+	//if err != nil {
+	//	a.noticeError(err.Error())
+	//}
+	//a.noticeWarning(output)
+	//err = pls.WriteFast("./log.txt", strings.Join(logs, "\n"))
+	//if err != nil {
+	//	a.noticeError(err.Error())
+	//}
+	//err = pls.WriteFast("/Users/purp1e/Desktop/log.txt", strings.Join(logs, "\n"))
+	//if err != nil {
+	//	a.noticeError(err.Error())
+	//}
 
 	return ""
 }

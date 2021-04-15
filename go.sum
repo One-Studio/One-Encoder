@@ -4,6 +4,12 @@ github.com/Masterminds/semver v1.5.0/go.mod h1:MB6lktGJrhw8PrUyiEoblNEGEQ+RzHPF0
 github.com/Netflix/go-expect v0.0.0-20180615182759-c93bf25de8e8/go.mod h1:oX5x61PbNXchhh0oikYAH+4Pcfw5LKv21+Jnpr6r6Pc=
 github.com/One-Studio/ptools v0.1.4 h1:aiH0+i6Zc57JqY2JG7XZoZqPoR8lpAUNG+d+dZDDObQ=
 github.com/One-Studio/ptools v0.1.4/go.mod h1:kM94h5YQsJkGnKq20c+19nVnRdBYOsX0ogqSIU7upl0=
+github.com/One-Studio/ptools v0.1.6 h1:YPF4eFQtRgdNDqrdoV7BCk2nfJ4dzmpbyS4/VknVd9U=
+github.com/One-Studio/ptools v0.1.6/go.mod h1:kM94h5YQsJkGnKq20c+19nVnRdBYOsX0ogqSIU7upl0=
+github.com/One-Studio/ptools v0.1.7 h1:WfFuzT47i5e5Zekz8hp2Ace8RYY/yr7PiVSVUeA6KOY=
+github.com/One-Studio/ptools v0.1.7/go.mod h1:kM94h5YQsJkGnKq20c+19nVnRdBYOsX0ogqSIU7upl0=
+github.com/One-Studio/ptools v0.1.8 h1:B6k74Di7nHmphoUxhtauyUF3E6ChRild5MlLoWlKP/M=
+github.com/One-Studio/ptools v0.1.8/go.mod h1:kM94h5YQsJkGnKq20c+19nVnRdBYOsX0ogqSIU7upl0=
 github.com/abadojack/whatlanggo v1.0.1 h1:19N6YogDnf71CTHm3Mp2qhYfkRdyvbgwWdd2EPxJRG4=
 github.com/abadojack/whatlanggo v1.0.1/go.mod h1:66WiQbSbJBIlOZMsvbKe5m6pzQovxCH9B/K8tQB2uoc=
 github.com/axgle/mahonia v0.0.0-20180208002826-3358181d7394 h1:OYA+5W64v3OgClL+IrOD63t4i/RW7RqrAVl9LTZ9UqQ=
@@ -67,6 +73,8 @@ github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 h1:zYyBkD/k9seD2A7fsi6
 github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646/go.mod h1:jpp1/29i3P1S/RLdc7JQKbRpFeM1dOBd8T9ki5s+AY8=
 github.com/otiai10/copy v1.5.0 h1:SoXDGnlTUZoqB/wSuj/Y5L6T5i6iN4YRAcMCd+JnLNU=
 github.com/otiai10/copy v1.5.0/go.mod h1:XWfuS3CrI0R6IE0FbgHsEazaXO8G0LpMp9o8tos0x4E=
+github.com/otiai10/copy v1.5.1 h1:a/cs2E1/1V0az8K5nblbl+ymEa4E11AfaOLMar8V34w=
+github.com/otiai10/copy v1.5.1/go.mod h1:XWfuS3CrI0R6IE0FbgHsEazaXO8G0LpMp9o8tos0x4E=
 github.com/otiai10/curr v0.0.0-20150429015615-9b4961190c95/go.mod h1:9qAhocn7zKJG+0mI8eUu6xqkFDYS2kb2saOteoSB3cE=
 github.com/otiai10/curr v1.0.0 h1:TJIWdbX0B+kpNagQrjgq8bCMrbhiuX73M2XwgtDMoOI=
 github.com/otiai10/curr v1.0.0/go.mod h1:LskTG5wDwr8Rs+nNQ+1LlxRjAtTZZjtJW4rMXl6j4vs=
@@ -94,6 +102,8 @@ github.com/syossan27/tebata v0.0.0-20180602121909-b283fe4bc5ba h1:2DHfQOxcpWdGf5
 github.com/syossan27/tebata v0.0.0-20180602121909-b283fe4bc5ba/go.mod h1:iLnlXG2Pakcii2CU0cbY07DRCSvpWNa7nFxtevhOChk=
 github.com/wailsapp/wails v1.10.1 h1:WGM5gms/fVI+Pql484sv5A2eDj13fYUQFIejmoIEN7k=
 github.com/wailsapp/wails v1.10.1/go.mod h1:XFZunea+USOCMMgBlz0A0JHLL3oWrRhnOl4baZlRpxo=
+github.com/wailsapp/wails v1.16.3 h1:wuJJU9PnnrrDvhh+DTr1MfqUSR1PDR5H+RilM5Wwd7c=
+github.com/wailsapp/wails v1.16.3/go.mod h1:aADbAvTzZrKGd4Td7d1l4Dp5Hx7lLJEvVH7guIHoDf8=
 golang.org/x/crypto v0.0.0-20190123085648-057139ce5d2b/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
@@ -104,6 +114,8 @@ golang.org/x/net v0.0.0-20190404232315-eb5bcb51f2a3/go.mod h1:t9HGtf8HONx5eT2rtn
 golang.org/x/net v0.0.0-20200625001655-4c5254603344/go.mod h1:/O7V0waA8r7cgGh81Ro3o1hOxt32SMVPicZroKQ2sZA=
 golang.org/x/net v0.0.0-20210331212208-0fccb6fa2b5c h1:KHUzaHIpjWVlVVNh65G3hhuj3KB1HnjY6Cq5cTvRQT8=
 golang.org/x/net v0.0.0-20210331212208-0fccb6fa2b5c/go.mod h1:p54w0d4576C0XHj96bSt6lcn1PtDYWL6XObtHCRCNQM=
+golang.org/x/net v0.0.0-20210414194228-064579744ee0 h1:iqW3Mjl/6IP9cHJC/wdiIu3lyBDMUfDElRMyFlqbtiQ=
+golang.org/x/net v0.0.0-20210414194228-064579744ee0/go.mod h1:9tjilg8BloeKEkVJvy7fQ90B1CfIiPueXVOjqfkSzI8=
 golang.org/x/sys v0.0.0-20180606202747-9527bec2660b/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20180905080454-ebe1bf3edb33/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20181228144115-9a3f9b0469bb/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
@@ -118,6 +130,8 @@ golang.org/x/sys v0.0.0-20201119102817-f84b799fce68/go.mod h1:h1NjWce9XRLGQEsW7w
 golang.org/x/sys v0.0.0-20210330210617-4fbd30eecc44/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210402192133-700132347e07 h1:4k6HsQjxj6hVMsI2Vf0yKlzt5lXxZsMW1q0zaq2k8zY=
 golang.org/x/sys v0.0.0-20210402192133-700132347e07/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20210415045647-66c3f260301c h1:6L+uOeS3OQt/f4eFHXZcTxeZrGCuz+CLElgEBjbcTA4=
+golang.org/x/sys v0.0.0-20210415045647-66c3f260301c/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1/go.mod h1:bj7SfCRtBDWHUb9snDiAeCFNEtKQo2Wmx5Cou7ajbmo=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/text v0.3.3/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=

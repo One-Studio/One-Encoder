@@ -18,7 +18,6 @@ func (c *CFG) SetDefCFG()  {
 	c.Init = false
 	c.AutoUpdate = false
 	c.FFmpegParam = nil
-	c.FFprobeParam = "-v quiet -print_format json -show_format"
 	c.X264Param = nil
 	c.X265Param = nil
 	switch runtime.GOOS {
@@ -36,18 +35,6 @@ func (c *CFG) SetDefCFG()  {
 			IsCLI: true,
 			VersionRegExp: "ffmpeg version (\\S+)-essentials_build-www.gyan.dev",
 			Fetch: "ffmpeg.exe",
-		}
-		c.FFprobe = pls.Tool{
-			Name: "ffprobe",
-			Path: ".\\tools\\ffprobe.exe",
-			TakeOver: true,
-			VersionApi: "https://www.gyan.dev/ffmpeg/builds/release-version",
-			VersionApiCDN: "",
-			DownloadLink: "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.7z",
-			DownloadLinkCDN: "",
-			IsGitHub: false,
-			IsCLI: true,
-			Fetch: "ffprobe.exe",
 		}
 		c.X264 = pls.Tool{
 			Name: "x264",
@@ -77,14 +64,12 @@ func (c *CFG) SetDefCFG()  {
 		c.Pssuspend = pls.Tool{
 			Name: "pssuspend",
 			Path: ".\\tools\\pssuspend.exe",
-			TakeOver: false,
-			VersionApi: "",
-			VersionApiCDN: "",
-			DownloadLink: "",
-			DownloadLinkCDN: "",
-			IsGitHub: false,
 			IsCLI: true,
-			Fetch: "",
+		}
+		c.MediaInfo = pls.Tool{
+			Name: "mediainfo",
+			Path: ".\\tools\\mediainfo\\mediainfo.exe",
+			IsCLI: true,
 		}
 	case "darwin":
 		//macos下参数
@@ -109,42 +94,22 @@ func (c *CFG) SetDefCFG()  {
 			IsCLI: true,
 			Fetch: "ffmpeg",
 		}
-		c.FFprobe = pls.Tool{
-			Name: "ffprobe",
-			Path: dir + "/tools/ffprobe",
-			TakeOver: false,
-			//TakeOver: true,
-			VersionApi: "https://evermeet.cx/ffmpeg/info/binary/version",
-			VersionApiCDN: "",
-			DownloadLink: "https://evermeet.cx/ffmpeg/get/ffprobe",
-			DownloadLinkCDN: "",
-			IsGitHub: false,
-			IsCLI: true,
-			Fetch: "ffprobe",
-		}
 		c.X264 = pls.Tool{
 			Name: "x264",
 			Path: dir + "/tools/x264",
-			TakeOver: false,
-			VersionApi: "",
-			VersionApiCDN: "",
-			DownloadLink: "",
-			DownloadLinkCDN: "",
-			IsGitHub: false,
 			IsCLI: true,
 			Fetch: "x264",
 		}
 		c.X265 = pls.Tool{
 			Name: "x265",
 			Path: dir + "/tools/x265",
-			TakeOver: false,
-			VersionApi: "",
-			VersionApiCDN: "",
-			DownloadLink: "",
-			DownloadLinkCDN: "",
-			IsGitHub: false,
 			IsCLI: true,
 			Fetch: "x265",
+		}
+		c.MediaInfo = pls.Tool{
+			Name: "mediainfo",
+			Path: "mediaInfo",
+			IsCLI: true,
 		}
 	default:
 		//linux等其他系统下参数
@@ -167,41 +132,22 @@ func (c *CFG) SetDefCFG()  {
 			IsCLI: true,
 			Fetch: "ffmpeg",
 		}
-		c.FFprobe = pls.Tool{
-			Name: "ffmpeg",
-			Path: dir + "/tools/ffprobe",
-			TakeOver: true,
-			VersionApi: "",
-			VersionApiCDN: "",
-			DownloadLink: "",
-			DownloadLinkCDN: "",
-			IsGitHub: false,
-			IsCLI: true,
-			Fetch: "ffprobe",
-		}
 		c.X264 = pls.Tool{
 			Name: "x264",
 			Path: dir + "/tools/x264",
-			TakeOver: false,
-			VersionApi: "",
-			VersionApiCDN: "",
-			DownloadLink: "",
-			DownloadLinkCDN: "",
-			IsGitHub: false,
 			IsCLI: true,
 			Fetch: "x264",
 		}
 		c.X265 = pls.Tool{
 			Name: "x265",
 			Path: dir + "/tools/x265",
-			TakeOver: false,
-			VersionApi: "",
-			VersionApiCDN: "",
-			DownloadLink: "",
-			DownloadLinkCDN: "",
-			IsGitHub: false,
 			IsCLI: true,
 			Fetch: "x265",
+		}
+		c.MediaInfo = pls.Tool{
+			Name: "mediainfo",
+			Path: "mediaInfo",
+			IsCLI: true,
 		}
 	}
 }
