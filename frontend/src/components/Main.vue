@@ -1,35 +1,26 @@
 <template>
-	<div class="ant-tabs-adjust">
-<!--    <a-button @click="getInput"></a-button>-->
-		<a-input-search
-			class="panel"
-      addon-before="输入"
-			placeholder="请选择输入"
-			size="large"
-      v-model="input"
-      @search="getInput"
-		>
-      <a-button slot="enterButton">
-        <a-icon type="folder"/>
-      </a-button>
-		</a-input-search>
-		<input type="file" name="filename" id="open" style="display:none"/>
-		<a-input-search
-			class="panel"
-      addon-before="输出"
-			placeholder="请选择输出"
-			size="large"
-      v-model="output"
-      @search="getOutput"
-		>
-      <a-button slot="enterButton">
-        <a-icon type="folder"/>
-      </a-button>
-		</a-input-search>
+	<q-page>
+		<q-input dense hide-bottom-space outlined v-model="input" label="请选择输入" class="q-mb-md">
+			<template v-slot:append>
+				<q-separator vertical />
+				<q-avatar class="q-ml-sm" icon="far fa-folder-open" @click="getInput" />
+			</template>
+		</q-input>
 
-		<div class="panel">
+		<input type="file" name="filename" id="open" style="display:none"/>
+
+		<q-input dense hide-bottom-space outlined v-model="output" label="请选择输出" class="q-mb-md">
+			<template v-slot:append>
+				<q-separator vertical />
+				<q-avatar class="q-ml-sm" icon="far fa-folder-open" @click="getOutput" />
+			</template>
+		</q-input>
+
+
+
+		<div class="panel q-mb-md">
 			<a-row type="flex" justify="space-between">
-				<a-radio-group button-style="outline" size="large"  v-model="tool">
+				<a-radio-group button-style="outline" size="large" v-model="tool">
 					<a-radio-button value="ffmpeg">ffmpeg</a-radio-button>
 					<a-radio-button value="x264">x264</a-radio-button>
 					<a-radio-button value="x265">x265</a-radio-button>
@@ -41,37 +32,32 @@
 				</a-radio-group>
 			</a-row>
 		</div>
-    <div class="panel">
-      <a-input type="textarea" :autoSize="{ minRows: 5, maxRows: 5 }"
-               placeholder="压制代码" v-model="param[tool][preset]"
-               style="font-size: 16px"
-      ></a-input>
-    </div>
-    <div class="panel">
-      <a-row type="flex" justify="space-between" align="middle">
-        <a-col :span="16">
-          <a-row type="flex" justify="space-between" align="middle" class="font-color-overwrite">
-            <a-col :span="2">
-              <a-progress type="circle" :showInfo="this.progressDisplayNum" :percent="progress" :width="26"/>
-            </a-col>
-            <a-col :span="3" style="margin-left: -4px">
-              {{ progress }}%
-            </a-col>
-            <a-col :span="19" >
-              {{ perLog }}
-            </a-col>
-          </a-row>
-        </a-col>
-        <a-col :span="8">
-          <a-row type="flex" justify="end">
-            <a-button size="large" @click="pauseEncode">暂停</a-button>
-            <a-button size="large" @click="encode" style="margin-left: 10px; width: 100px" :type="this.progressFinished ? '':'danger'">{{ startOrQuit }}
-            </a-button>
-          </a-row>
-        </a-col>
-      </a-row>
-    </div>
-	</div>
+
+		<q-input
+			v-model="param[tool][preset]"
+			filled
+			type="textarea"
+			class="q-mb-md"
+		/>
+
+		<div class="col-12 row justify-between">
+			<div class="col-10 text-left">
+				<q-knob
+					v-model="progress"
+					track-color="grey-3"
+					size="26px"
+					color="primary"
+					class="q-mr-md"
+				/>
+				<span class="q-mr-md">{{ progress }}%</span>
+				<span>{{ perLog }}</span>
+			</div>
+			<div class="col-2 text-right">
+				<q-btn outline text-color="primary" label="暂停" />
+				<q-btn class="q-ml-sm" outline text-color="primary" label="开始" />
+			</div>
+		</div>
+	</q-page>
 </template>
 
 <script>
@@ -99,7 +85,8 @@ export default {
 			// progress: 0,
 			// status: false  //是否正在执行
 			progressFinished: true,
-			progressDisplayNum: false
+			progressDisplayNum: false,
+			file: null,
 		}
 	},
 	mounted() {
@@ -177,13 +164,13 @@ export default {
 		//   window.backend.App.SetParam(this.select, this.param[this.select])
 		// },
 		getInput() {
-      // console.log("选择输入文件debug")
+			// console.log("选择输入文件debug")
 			// document.getElementById('open').click()
 			// console.log('document.getElementById(\'open\').files', document.getElementById('open').files)
 			window.backend.App.SelectFileTitle('选择输入文件').then((path) => {
 				if (path.length !== 0) {
 					this.input = path
-          this.generateOutput()
+					this.generateOutput()
 				}
 				//TODO 使用ffprobe获取输入文件参数
 

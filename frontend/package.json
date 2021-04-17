@@ -1,17 +1,19 @@
 {
   "name": "one-encoder",
-  "author": "Purp1e<438518244@qq.com>",
   "private": true,
+  "author": "Purp1e<438518244@qq.com>",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@quasar/extras": "^1.0.0",
     "@wailsapp/runtime": "^1.0.10",
     "ant-design-vue": "^1.7.4",
     "core-js": "^3.6.4",
     "element-ui": "^2.15.1",
+    "quasar": "^1.0.0",
     "regenerator-runtime": "^0.13.3",
     "vant": "^2.12.6",
     "vue": "^2.6.11",
@@ -25,6 +27,11 @@
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^6.2.1",
     "eventsource-polyfill": "^0.9.6",
+    "node-sass": "^4.13.0",
+    "postcss-rtl": "^1.2.3",
+    "sass-loader": "^8.0.0",
+    "vue-cli-plugin-quasar": "~3.0.1",
+    "vue-router": "^3.5.1",
     "vue-template-compiler": "^2.6.11",
     "webpack-hot-middleware": "^2.25.0"
   },

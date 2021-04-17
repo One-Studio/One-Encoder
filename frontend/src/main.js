@@ -4,7 +4,7 @@ import Vue from 'vue';
 import App from './App.vue';
 
 import {Tab, Tabs} from 'vant';
-// import Vant from 'vant';
+import Vant from 'vant';
 import 'vant/lib/index.css';
 // import ElementUI from 'element-ui';
 // import 'element-ui/lib/theme-chalk/index.css';
@@ -13,7 +13,7 @@ import 'ant-design-vue/dist/antd.css';
 
 Vue.use(Tab);
 Vue.use(Tabs);
-// Vue.use(Vant);
+Vue.use(Vant);
 // Vue.use(ElementUI);
 Vue.use(Antd);
 
@@ -26,6 +26,7 @@ Vue.config.productionTip = false;
 Vue.config.devtools = true;
 
 import * as Wails from '@wailsapp/runtime';
+import './quasar'
 
 Wails.Init(() => {
     new Vue({
